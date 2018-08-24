@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.traderev.model.UserCarBid;
 import com.traderev.repository.CarBidAmountRepository;
+import com.traderev.repository.CarBidHistoryRepository;
 import com.traderev.repository.UserCarBidRepository;
 import com.traderev.vo.UserCarBidVO;
 
@@ -18,6 +19,9 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 	
 	@Autowired
 	CarBidAmountRepository carBidAmountRepository;
+	
+	@Autowired
+	CarBidHistoryRepository carBidHistoryRepository;
 	
 	@Override
 	public UserCarBid findUserRelatedCar(UserCarBidVO userCarBidVO) {
@@ -47,5 +51,10 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 			userCarBid.setBidAmount(userCarBidVO.getBidAmount());	
 			userCarBidRepository.saveAndFlush(userCarBid);
 		}
+	}
+
+	@Override
+	public List<UserCarBid> getCarBiddingHistory(UserCarBidVO userCarBidVO) {
+		return  carBidHistoryRepository.getCarHistoryBid(userCarBidVO.getCar());
 	}
 }
