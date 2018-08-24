@@ -1,10 +1,10 @@
 package com.traderev.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.traderev.model.UserCarBid;
 import com.traderev.repository.CarBidAmountRepository;
 import com.traderev.repository.UserCarBidRepository;
@@ -21,25 +21,31 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 	
 	@Override
 	public UserCarBid findUserRelatedCar(UserCarBidVO userCarBidVO) {
-		return userCarBidRepository.findByUserIdAndCarBidAmount(userCarBidVO.getUserId(),userCarBidVO.getCar());
+		return userCarBidRepository.findByUserIdAndBidAmount(userCarBidVO.getUserId(),userCarBidVO.getBidAmount());
 	}
 
 	@Override
 	public void saveUserBid(UserCarBidVO userCarBidVO) {
-		try {
-			UserCarBid userCarBidRepo = userCarBidRepository.findByUserId(userCarBidVO.getUserId());
-			ObjectMapper objectMapper = new ObjectMapper();
-			String carBidAmount = objectMapper.writeValueAsString(userCarBidVO.getCarBidAmountVO());
-			if(userCarBidRepo != null && userCarBidVO.getUserId().equals(userCarBidVO.getUserId())) {
+		List<UserCarBid> userCarBidRepo = userCarBidRepository.findAll();
+		for(UserCarBid userCarBidList : userCarBidRepo) {
+			if(userCarBidRepo != null && userCarBidList.getUserId().equals(userCarBidVO.getUserId()) && !userCarBidVO.isCreateNewOne()) {
 				carBidAmountRepository.updateUserCarBid(userCarBidVO);
 			}else if(userCarBidVO.isCreateNewOne()){
 				UserCarBid userCarBid = new UserCarBid();
 				userCarBid.setUserId(userCarBidVO.getUserId());
-				userCarBid.setCarBidAmount(carBidAmount);	
+				userCarBid.setCarName(userCarBidVO.getCar());
+				userCarBid.setBidAmount(userCarBidVO.getBidAmount());	
 				userCarBidRepository.saveAndFlush(userCarBid);
+				userCarBidVO.setCreateNewOne(false);
 			}
-		}catch (JsonProcessingException e) {
-			e.printStackTrace();
+		}
+		
+		if(userCarBidRepo.isEmpty()) {
+			UserCarBid userCarBid = new UserCarBid();
+			userCarBid.setUserId(userCarBidVO.getUserId());
+			userCarBid.setCarName(userCarBidVO.getCar());
+			userCarBid.setBidAmount(userCarBidVO.getBidAmount());	
+			userCarBidRepository.saveAndFlush(userCarBid);
 		}
 	}
 }

@@ -1,13 +1,10 @@
 package com.traderev.vo;
 
-import java.util.List;
-
 public class UserCarBidVO {
 
 	String userId;
 	String car;
-	String bidAmount;
-	List<CarBidAmountVO> carBidAmountVO;
+	Double bidAmount;
 	boolean createNewOne;
 	
 	/**
@@ -25,13 +22,13 @@ public class UserCarBidVO {
 	/**
 	 * @return the bidAmount
 	 */
-	public String getBidAmount() {
+	public Double getBidAmount() {
 		return bidAmount;
 	}
 	/**
 	 * @param bidAmount the bidAmount to set
 	 */
-	public void setBidAmount(String bidAmount) {
+	public void setBidAmount(Double bidAmount) {
 		this.bidAmount = bidAmount;
 	}
 	/**
@@ -57,17 +54,5 @@ public class UserCarBidVO {
 	 */
 	public void setCar(String car) {
 		this.car = car;
-	}
-	/**
-	 * @return the carBidAmountVO
-	 */
-	public List<CarBidAmountVO> getCarBidAmountVO() {
-		return carBidAmountVO;
-	}
-	/**
-	 * @param carBidAmountVO the carBidAmountVO to set
-	 */
-	public void setCarBidAmountVO(List<CarBidAmountVO> carBidAmountVO) {
-		this.carBidAmountVO = carBidAmountVO;
 	}
 }

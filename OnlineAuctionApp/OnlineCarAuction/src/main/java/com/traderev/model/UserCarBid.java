@@ -22,8 +22,11 @@ public class UserCarBid {
 	@Column(name="USR_ID")
 	private String userId;
 	
-	@Column(name="CAR_BID_AMNT")
-	private String carBidAmount;
+	@Column(name="CAR")
+	private String carName;
+	
+	@Column(name="BID_AMNT")
+	private Double bidAmount;
 
 	/**
 	 * @return the userCarBidId
@@ -54,16 +57,30 @@ public class UserCarBid {
 	}
 
 	/**
-	 * @return the carBidAmount
+	 * @return the carName
 	 */
-	public String getCarBidAmount() {
-		return carBidAmount;
+	public String getCarName() {
+		return carName;
 	}
 
 	/**
-	 * @param carBidAmount the carBidAmount to set
+	 * @param carName the carName to set
 	 */
-	public void setCarBidAmount(String carBidAmount) {
-		this.carBidAmount = carBidAmount;
+	public void setCarName(String carName) {
+		this.carName = carName;
+	}
+
+	/**
+	 * @return the bidAmount
+	 */
+	public Double getBidAmount() {
+		return bidAmount;
+	}
+
+	/**
+	 * @param bidAmount the bidAmount to set
+	 */
+	public void setBidAmount(Double bidAmount) {
+		this.bidAmount = bidAmount;
 	}
 }

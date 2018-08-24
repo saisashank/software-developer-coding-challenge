@@ -4,7 +4,7 @@ public class CarBidHistory {
 
 	private String userId;
 	private String carName;
-	private String bidAmount;
+	private Double bidAmount;
 	/**
 	 * @return the userId
 	 */
@@ -32,13 +32,13 @@ public class CarBidHistory {
 	/**
 	 * @return the bidAmount
 	 */
-	public String getBidAmount() {
+	public Double getBidAmount() {
 		return bidAmount;
 	}
 	/**
 	 * @param bidAmount the bidAmount to set
 	 */
-	public void setBidAmount(String bidAmount) {
+	public void setBidAmount(Double bidAmount) {
 		this.bidAmount = bidAmount;
 	}
 }
