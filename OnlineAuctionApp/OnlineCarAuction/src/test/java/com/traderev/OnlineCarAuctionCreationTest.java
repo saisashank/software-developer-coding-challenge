@@ -54,16 +54,74 @@ public class OnlineCarAuctionCreationTest {
 	}
 	
 	@Test
+	public void testSaveUserBid_Existing_High_Bid() {
+		UserCarBidVO userCarBidVO= new UserCarBidVO();
+		userCarBidVO.setUserId("Sashank");
+		userCarBidVO.setCar("Benz");
+		userCarBidVO.setBidAmount(35445.0);
+		userCarBidVO.setCreateNewOne(false);
+		
+		userCarBidService.saveUserBid(userCarBidVO);
+		
+		UserCarBid userCarBid = userCarBidRepository.findByUserId("Sashank");
+		assertEquals(userCarBidVO.getCar(), userCarBid.getCarName());
+	}
+	
+	@Test
 	public void testSaveUserBid_Create_New() {
 		UserCarBidVO userCarBidVO= new UserCarBidVO();
-		userCarBidVO.setUserId("Sai");
-		userCarBidVO.setCar("Nissan");
+		userCarBidVO.setUserId("Nani");
+		userCarBidVO.setCar("Benz");
 		userCarBidVO.setBidAmount(35000.0);
 		userCarBidVO.setCreateNewOne(true);
 		
 		userCarBidService.saveUserBid(userCarBidVO);
 		
-		UserCarBid userCarBid = userCarBidRepository.findByUserId("Sai");
+		UserCarBid userCarBid = userCarBidRepository.findByUserId("Nani");
+		assertEquals(userCarBidVO.getCar(), userCarBid.getCarName());
+	}
+	
+	@Test
+	public void testSaveUserBid_Create_New_Highest_Bid() {
+		UserCarBidVO userCarBidVO= new UserCarBidVO();
+		userCarBidVO.setUserId("Nani");
+		userCarBidVO.setCar("Benz");
+		userCarBidVO.setBidAmount(35001.0);
+		userCarBidVO.setCreateNewOne(true);
+		
+		userCarBidService.saveUserBid(userCarBidVO);
+		userCarBidService.findUserRelatedCar(userCarBidVO);
+		
+		UserCarBid userCarBid = userCarBidRepository.findByUserId("Nani");
+		assertEquals(userCarBidVO.getCar(), userCarBid.getCarName());
+	}
+	
+	@Test
+	public void testSaveUserBid_Create_New_No_Car_For_User() {
+		UserCarBidVO userCarBidVO= new UserCarBidVO();
+		userCarBidVO.setUserId("Ravi");
+		userCarBidVO.setCar("Benz");
+		userCarBidVO.setBidAmount(35002.0);
+		userCarBidVO.setCreateNewOne(true);
+		
+		userCarBidService.saveUserBid(userCarBidVO);
+		userCarBidService.findUserRelatedCar(userCarBidVO);
+		
+		UserCarBid userCarBid = userCarBidRepository.findByUserId("Ravi");
+		assertEquals(userCarBidVO.getCar(), userCarBid.getCarName());
+	}
+	
+	@Test
+	public void testSaveUserBid_Create_New_No_Car_For_User_Else() {
+		UserCarBidVO userCarBidVO= new UserCarBidVO();
+		userCarBidVO.setUserId("Ravi");
+		userCarBidVO.setCar("Benz");
+		userCarBidVO.setBidAmount(350454.0);
+		userCarBidVO.setCreateNewOne(true);
+		
+		userCarBidService.saveUserBid(userCarBidVO);
+		
+		UserCarBid userCarBid = userCarBidRepository.findByUserId("Ravi");
 		assertEquals(userCarBidVO.getCar(), userCarBid.getCarName());
 	}
 }

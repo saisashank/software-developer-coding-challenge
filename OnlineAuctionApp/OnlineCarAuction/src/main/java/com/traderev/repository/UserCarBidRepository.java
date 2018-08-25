@@ -8,7 +8,7 @@ import com.traderev.model.UserCarBid;
 @Repository
 public interface UserCarBidRepository extends JpaRepository<UserCarBid, Long> {
 
-	UserCarBid findByUserIdAndBidAmount(String userId, Double bidAmount);
+	UserCarBid findByUserIdAndCarName(String userId, String carName);
 	
 	UserCarBid findByUserId(String userId);
 }

@@ -27,26 +27,26 @@ import com.zaxxer.hikari.HikariDataSource;
 @EnableJpaRepositories(entityManagerFactoryRef = "tradeRevEntityManagerFactory", transactionManagerRef = "tradeRevTransactionManager", basePackages = {"com.traderev.repository" })
 public class TradeRevConfig {
 
-	@Value("${spring.datasource.hikari.maria.driverClassName}")
-	private String mariaDbDriver;// mariaDB Driver
+	@Value("${spring.datasource.hikari.driverClassName}")
+	private String dbDriver;
 
-	@Value("${spring.datasource.hikari.maria.jdbcUrl}")
-	private String mariaDbURL;// mariaDB URL
+	@Value("${spring.datasource.hikari.jdbcUrl}")
+	private String dbUrl;
 
-	@Value("${spring.datasource.hikari.maria.username}")
-	private String mariaUserName;
+	@Value("${spring.datasource.hikari.username}")
+	private String userName;
 	
-	@Value("${spring.datasource.hikari.maria.password}")
-	private String mariaPassword;
+	@Value("${spring.datasource.hikari.password}")
+	private String password;
 
 	@Primary
 	@Bean(name = "tradeRevDataSource")
 	public DataSource dataSource(@Qualifier("hikariCP") HikariConfig hikariConfig) {
 		
-		hikariConfig.setJdbcUrl(mariaDbURL);
-		hikariConfig.setUsername(mariaUserName);
-		hikariConfig.setPassword(mariaPassword);
-		hikariConfig.setDriverClassName(mariaDbDriver);
+		hikariConfig.setJdbcUrl(dbUrl);
+		hikariConfig.setUsername(userName);
+		hikariConfig.setPassword(password);
+		hikariConfig.setDriverClassName(dbDriver);
 		return new HikariDataSource(hikariConfig);
 
 	}

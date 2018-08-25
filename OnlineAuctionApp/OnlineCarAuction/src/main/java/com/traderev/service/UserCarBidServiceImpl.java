@@ -26,23 +26,39 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 	CarBidHistoryRepository carBidHistoryRepository;
 	
 	@Override
-	public UserCarBid findUserRelatedCar(UserCarBidVO userCarBidVO) {
-		return userCarBidRepository.findByUserIdAndBidAmount(userCarBidVO.getUserId(),userCarBidVO.getBidAmount());
+	public boolean findUserRelatedCar(UserCarBidVO userCarBidVO) {
+		UserCarBid userCarBid = userCarBidRepository.findByUserIdAndCarName(userCarBidVO.getUserId(),userCarBidVO.getCar());
+		if(userCarBid != null) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
-	public void saveUserBid(UserCarBidVO userCarBidVO) {
-		List<UserCarBid> userCarBidRepo = userCarBidRepository.findAll();
+	public Map<String,Object> saveUserBid(UserCarBidVO userCarBidVO) {
+		Map<String,Object> responseMap = new HashMap<>();
+		List<UserCarBid> userCarBidRepo = getCarBiddingHistory(userCarBidVO);
 		for(UserCarBid userCarBidList : userCarBidRepo) {
-			if(userCarBidRepo != null && userCarBidList.getUserId().equals(userCarBidVO.getUserId()) && !userCarBidVO.isCreateNewOne()) {
-				carBidAmountRepository.updateUserCarBid(userCarBidVO);
-			}else if(userCarBidVO.isCreateNewOne()){
-				UserCarBid userCarBid = new UserCarBid();
-				userCarBid.setUserId(userCarBidVO.getUserId());
-				userCarBid.setCarName(userCarBidVO.getCar());
-				userCarBid.setBidAmount(userCarBidVO.getBidAmount());	
-				userCarBidRepository.saveAndFlush(userCarBid);
-				userCarBidVO.setCreateNewOne(false);
+			UserCarBid carCurrentHighestBid = userCarBidRepo.get(0);
+			if(userCarBidVO.getBidAmount() > carCurrentHighestBid.getBidAmount()) {
+				if(userCarBidRepo != null && userCarBidList.getUserId().equals(userCarBidVO.getUserId()) && !userCarBidVO.isCreateNewOne()) {
+					carBidAmountRepository.updateUserCarBid(userCarBidVO);
+					responseMap.put("header", "successful updation");
+				}else if(userCarBidVO.isCreateNewOne()){
+					if(findUserRelatedCar(userCarBidVO)) {
+						UserCarBid userCarBid = new UserCarBid();
+						userCarBid.setUserId(userCarBidVO.getUserId());
+						userCarBid.setCarName(userCarBidVO.getCar());
+						userCarBid.setBidAmount(userCarBidVO.getBidAmount());
+						userCarBidRepository.saveAndFlush(userCarBid);
+						userCarBidVO.setCreateNewOne(false);
+						responseMap.put("header", "successful insertion");
+					}else {
+						responseMap.put("header", "user has already bid for the car... Please go ahead and update your bid...");
+					}
+				}
+			}else {
+				responseMap.put("header", "unsuccessful insertion/updation as the bid is less than or equal to the highest bid");
 			}
 		}
 		
@@ -52,7 +68,9 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 			userCarBid.setCarName(userCarBidVO.getCar());
 			userCarBid.setBidAmount(userCarBidVO.getBidAmount());	
 			userCarBidRepository.saveAndFlush(userCarBid);
+			responseMap.put("header", "successful insertion");
 		}
+		return responseMap;
 	}
 
 	@Override

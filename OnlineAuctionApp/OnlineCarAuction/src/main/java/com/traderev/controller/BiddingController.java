@@ -21,14 +21,9 @@ public class BiddingController {
 	@Autowired
 	UserCarBidService userCarBidService;
 	
-	@RequestMapping(value="/getUserRelatedCar",produces=MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
-	public UserCarBid getUserRelatedCar(@RequestBody UserCarBidVO userCarBidVO) {
-		return userCarBidService.findUserRelatedCar(userCarBidVO);
-	}
-	
 	@RequestMapping(value="/saveUserBid",produces=MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.PUT,consumes=MediaType.APPLICATION_JSON_VALUE)
-	public void saveUserBid(@RequestBody UserCarBidVO userCarBidVO) {
-		userCarBidService.saveUserBid(userCarBidVO);
+	public Map<String,Object> saveUserBid(@RequestBody UserCarBidVO userCarBidVO) {
+		return userCarBidService.saveUserBid(userCarBidVO);
 	}
 	
 	@RequestMapping(value="/getCarBidHistory",produces=MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)

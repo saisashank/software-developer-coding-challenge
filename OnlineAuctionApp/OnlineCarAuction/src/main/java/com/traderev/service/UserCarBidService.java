@@ -8,9 +8,9 @@ import com.traderev.vo.UserCarBidVO;
 
 public interface UserCarBidService {
 	
-	UserCarBid findUserRelatedCar(UserCarBidVO userCarBidVO);
+	boolean findUserRelatedCar(UserCarBidVO userCarBidVO);
 	
-	void saveUserBid(UserCarBidVO userCarBidVO);
+	Map<String,Object> saveUserBid(UserCarBidVO userCarBidVO);
 	
 	List<UserCarBid> getCarBiddingHistory(UserCarBidVO userCarBidVO);
 	
