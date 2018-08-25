@@ -1,6 +1,7 @@
 package com.traderev.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -33,5 +34,10 @@ public class BiddingController {
 	@RequestMapping(value="/getCarBidHistory",produces=MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
 	public List<UserCarBid> getCarBidHistory(@RequestBody UserCarBidVO userCarBidVO) {
 		return userCarBidService.getCarBiddingHistory(userCarBidVO);
+	}
+	
+	@RequestMapping(value="/getWinningBidForCar",produces=MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
+	public Map<String,Object> getWinningBidForCar(@RequestBody UserCarBidVO userCarBidVO) {
+		return userCarBidService.getWinningBid(userCarBidVO);
 	}
 }

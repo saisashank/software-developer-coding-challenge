@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,6 +44,48 @@ public class OnlineCarAuctionRetreiveTest {
 		userCarBidVO.setCar("Benz");
 		List<UserCarBid> userCarBidTestList =userCarBidService.getCarBiddingHistory(userCarBidVO);
 		assertEquals(userCarBidTestList.size(),1);
+		
+	}
+	
+	@Test
+	public void testGetWinningBid() {
+		List<UserCarBid> userCarBidList = new ArrayList<>();
+		UserCarBid userCarBid = new UserCarBid();
+		userCarBid.setUserCarBidId(1L);
+		userCarBid.setUserId("Sashank");
+		userCarBid.setBidAmount(35000.0);
+		userCarBid.setCarName("Benz");
+		userCarBidList.add(userCarBid);
+		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class))).thenReturn(userCarBidList);
+		
+		UserCarBidVO userCarBidVO = new UserCarBidVO();
+		userCarBidVO.setCar("Benz");
+		Map<String,Object> testResponseMap = userCarBidService.getWinningBid(userCarBidVO);
+		assertEquals(testResponseMap.get("header"),"Winning Bid for a car");
+		
+	}
+	
+	@Test
+	public void testGetWinningBid_Same_Bid() {
+		List<UserCarBid> userCarBidList = new ArrayList<>();
+		UserCarBid userCarBid1 = new UserCarBid();
+		UserCarBid userCarBid2 = new UserCarBid();
+		userCarBid1.setUserCarBidId(1L);
+		userCarBid1.setUserId("Sashank");
+		userCarBid1.setBidAmount(35000.0);
+		userCarBid1.setCarName("Benz");
+		userCarBid2.setUserCarBidId(2L);
+		userCarBid2.setUserId("Sai");
+		userCarBid2.setBidAmount(35000.0);
+		userCarBid2.setCarName("Benz");
+		userCarBidList.add(userCarBid1);
+		userCarBidList.add(userCarBid2);
+		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class))).thenReturn(userCarBidList);
+		
+		UserCarBidVO userCarBidVO = new UserCarBidVO();
+		userCarBidVO.setCar("Benz");
+		Map<String,Object> testResponseMap = userCarBidService.getWinningBid(userCarBidVO);
+		assertEquals(testResponseMap.get("header"),"There is a tie in the Bid among the user's, Please check the Bidding  History for further details....");
 		
 	}
 

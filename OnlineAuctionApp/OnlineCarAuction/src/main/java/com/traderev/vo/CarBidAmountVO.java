@@ -2,30 +2,30 @@ package com.traderev.vo;
 
 public class CarBidAmountVO {
 
-	String carname;
-	String bidValue;
+	String carName;
+	Double bidValue;
 	/**
 	 * @return the carname
 	 */
-	public String getCarname() {
-		return carname;
+	public String getCarName() {
+		return carName;
 	}
 	/**
 	 * @param carname the carname to set
 	 */
-	public void setCarname(String carname) {
-		this.carname = carname;
+	public void setCarName(String carName) {
+		this.carName = carName;
 	}
 	/**
 	 * @return the bidValue
 	 */
-	public String getBidValue() {
+	public Double getBidValue() {
 		return bidValue;
 	}
 	/**
 	 * @param bidValue the bidValue to set
 	 */
-	public void setBidValue(String bidValue) {
+	public void setBidValue(Double bidValue) {
 		this.bidValue = bidValue;
 	}
 }

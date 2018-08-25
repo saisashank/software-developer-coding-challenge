@@ -1,6 +1,8 @@
 package com.traderev.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,5 +58,26 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 	@Override
 	public List<UserCarBid> getCarBiddingHistory(UserCarBidVO userCarBidVO) {
 		return  carBidHistoryRepository.getCarHistoryBid(userCarBidVO.getCar());
+	}
+
+	@Override
+	public Map<String,Object> getWinningBid(UserCarBidVO userCarBidVO) {
+		Map<String,Object> responseMap = new HashMap<>();
+		int count = 0;
+		List<UserCarBid> userCarBidList =carBidHistoryRepository.getCarHistoryBid(userCarBidVO.getCar());
+		UserCarBid userWinningBid = userCarBidList.get(0);
+		for(UserCarBid userCarBid:userCarBidList) {
+			if(userCarBid.getBidAmount().equals(userWinningBid.getBidAmount())) {
+				count++;
+			}
+		}
+		if(count>1) {
+			responseMap.put("header", "There is a tie in the Bid among the user's, Please check the Bidding  History for further details....");
+			responseMap.put("userBidDetails", null);
+		}else {
+			responseMap.put("header", "Winning Bid for a car");
+			responseMap.put("userBidDetails", userWinningBid);
+		}
+		return responseMap;
 	}
 }
