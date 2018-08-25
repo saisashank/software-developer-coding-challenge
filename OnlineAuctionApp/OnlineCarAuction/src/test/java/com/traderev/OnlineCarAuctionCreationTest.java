@@ -124,4 +124,19 @@ public class OnlineCarAuctionCreationTest {
 		UserCarBid userCarBid = userCarBidRepository.findByUserId("Ravi");
 		assertEquals(userCarBidVO.getCar(), userCarBid.getCarName());
 	}
+	
+
+	@Test
+	public void testSaveUserBid_Car_Unavilable() {
+		UserCarBidVO userCarBidVO= new UserCarBidVO();
+		userCarBidVO.setUserId("Ravi");
+		userCarBidVO.setCar("Toyota");
+		userCarBidVO.setBidAmount(350454.0);
+		userCarBidVO.setCreateNewOne(true);
+		
+		userCarBidService.saveUserBid(userCarBidVO);
+		
+		UserCarBid userCarBid = userCarBidRepository.findByUserId("Ravi");
+		assertEquals(null, userCarBid);
+	}
 }
