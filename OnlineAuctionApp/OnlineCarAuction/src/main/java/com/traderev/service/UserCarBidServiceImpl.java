@@ -186,4 +186,18 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 		}
 		return responseMap;
 	}
+
+	@Override
+	public Map<String, Object> changeStatusOfCar(UserCarBidVO userCarBidVO) {
+		Map<String,Object> responseMap = new HashMap<>();
+		try {
+		String status = carUpdateDetailsRepository.updateCarAvailability(userCarBidVO.getCar());
+		responseMap.put("header", "Successful Updated Status of a Car...");
+		responseMap.put("Status", status);
+		}catch(Exception e){
+			logger.info("Exception in the getWinningBid "+e);
+			responseMap.put("Exception occured is: ", e.getMessage());
+		}
+		return responseMap;
+	}
 }

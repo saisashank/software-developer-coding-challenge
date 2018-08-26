@@ -52,7 +52,7 @@ public class OnlineCarAuctionRetreiveTest {
 		UserCarBidVO userCarBidVO = new UserCarBidVO();
 		userCarBidVO.setCar("Benz");
 		Map<String,Object> userCarBidTestList =userCarBidService.getCarBiddingHistory(userCarBidVO);
-		assertEquals(userCarBidTestList.size(),2);
+		assertEquals(2,userCarBidTestList.size());
 		
 	}
 	
@@ -64,7 +64,7 @@ public class OnlineCarAuctionRetreiveTest {
 		UserCarBidVO userCarBidVO = new UserCarBidVO();
 		userCarBidVO.setCar("Benz");
 		Map<String,Object> userCarBidTestList =userCarBidService.getCarBiddingHistory(userCarBidVO);
-		assertEquals(userCarBidTestList.size(),2);
+		assertEquals(2,userCarBidTestList.size());
 		
 	}
 	
@@ -75,7 +75,7 @@ public class OnlineCarAuctionRetreiveTest {
 		UserCarBidVO userCarBidVO = new UserCarBidVO();
 		userCarBidVO.setCar(null);
 		Map<String,Object> userCarBidTestList =userCarBidService.getCarBiddingHistory(userCarBidVO);
-		assertEquals(userCarBidTestList.size(),1);
+		assertEquals(1,userCarBidTestList.size());
 		
 	}
 	
@@ -101,7 +101,7 @@ public class OnlineCarAuctionRetreiveTest {
 		userCarBidVO.setEmailAddress("shashank@gmail.com");
 		userCarBidVO.setPhoneNumber("354-645-4536");
 		Map<String,Object> testResponseMap = userCarBidService.getWinningBid(userCarBidVO);
-		assertEquals(testResponseMap.get("header"),"Winning Bid for a car");
+		assertEquals("Winning Bid for a car",testResponseMap.get("header"));
 		
 	}
 	
@@ -113,7 +113,7 @@ public class OnlineCarAuctionRetreiveTest {
 		UserCarBidVO userCarBidVO = new UserCarBidVO();
 		userCarBidVO.setCar("Benz");
 		Map<String,Object> testResponseMap = userCarBidService.getWinningBid(userCarBidVO);
-		assertEquals(testResponseMap.get("header"),"No Bid has been made on the car...");
+		assertEquals("No Bid has been made on the car...",testResponseMap.get("header"));
 		
 	}
 	
@@ -124,7 +124,7 @@ public class OnlineCarAuctionRetreiveTest {
 		UserCarBidVO userCarBidVO = new UserCarBidVO();
 		userCarBidVO.setCar(null);
 		Map<String,Object> testResponseMap = userCarBidService.getWinningBid(userCarBidVO);
-		assertEquals(testResponseMap.size(),1);
+		assertEquals(1,testResponseMap.size());
 		
 	}
 	
@@ -148,7 +148,7 @@ public class OnlineCarAuctionRetreiveTest {
 		UserCarBidVO userCarBidVO = new UserCarBidVO();
 		userCarBidVO.setCar("Benz");
 		Map<String,Object> testResponseMap = userCarBidService.getWinningBid(userCarBidVO);
-		assertEquals(testResponseMap.get("header"),"There is a tie in the Bid among the user's, Please check the Bidding  History for further details....");
+		assertEquals("There is a tie in the Bid among the user's, Please check the Bidding  History for further details....",testResponseMap.get("header"));
 		
 	}
 	
@@ -167,7 +167,7 @@ public class OnlineCarAuctionRetreiveTest {
 		UserCarBidVO userCarBidVO = new UserCarBidVO();
 		userCarBidVO.setCarAvailability("Y");
 		Map<String,Object> testResponseMap = userCarBidService.getAvailableCarForBid(userCarBidVO);
-		assertEquals(testResponseMap.get("header"),"Available car's for Bidding...");
+		assertEquals("Available car's for Bidding...",testResponseMap.get("header"));
 		
 	}
 	
@@ -179,7 +179,7 @@ public class OnlineCarAuctionRetreiveTest {
 		UserCarBidVO userCarBidVO = new UserCarBidVO();
 		userCarBidVO.setCarAvailability("Y");
 		Map<String,Object> testResponseMap = userCarBidService.getAvailableCarForBid(userCarBidVO);
-		assertEquals(testResponseMap.get("header"),"Sorry, currently no car's are available for bidding...");
+		assertEquals("Sorry, currently no car's are available for bidding...",testResponseMap.get("header"));
 		
 	}
 	
@@ -190,7 +190,30 @@ public class OnlineCarAuctionRetreiveTest {
 		UserCarBidVO userCarBidVO = new UserCarBidVO();
 		userCarBidVO.setCarAvailability(null);
 		Map<String,Object> testResponseMap = userCarBidService.getAvailableCarForBid(userCarBidVO);
-		assertEquals(testResponseMap.size(),1);
+		assertEquals(1,testResponseMap.size());
+		
+	}
+	
+	@Test
+	public void testChangeStatusOfCar() {
+		String message = "success";
+		Mockito.when(carUpdateDetailsRepository.updateCarAvailability(Mockito.any(String.class))).thenReturn(message);
+		
+		UserCarBidVO userCarBidVO = new UserCarBidVO();
+		userCarBidVO.setCar("Toyota");
+		Map<String,Object> testResponseMap = userCarBidService.changeStatusOfCar(userCarBidVO);
+		assertEquals(2,testResponseMap.size());
+		
+	}
+	
+	@Test
+	public void testChangeStatusOfCar_Exception() {
+		Mockito.when(carUpdateDetailsRepository.updateCarAvailability(Mockito.any(String.class))).thenThrow(Exception.class);
+		
+		UserCarBidVO userCarBidVO = new UserCarBidVO();
+		userCarBidVO.setCar(null);
+		Map<String,Object> testResponseMap = userCarBidService.changeStatusOfCar(userCarBidVO);
+		assertEquals(1,testResponseMap.size());
 		
 	}
 
