@@ -63,7 +63,7 @@ public class OnlineCarAuctionCreationTest {
 	@Test
 	public void testSaveUserBid_Exception() {
 		Map<String,Object> testResponseMap = userCarBidService.saveUserBid(null);
-		assertEquals(testResponseMap.size(), 1);
+		assertEquals(1,testResponseMap.size());
 	}
 	
 	@Test
