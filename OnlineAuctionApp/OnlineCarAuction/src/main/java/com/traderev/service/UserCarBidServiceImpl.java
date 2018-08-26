@@ -78,6 +78,8 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 				userCarBid.setUserId(userCarBidVO.getUserId());
 				userCarBid.setCarName(userCarBidVO.getCar());
 				userCarBid.setBidAmount(userCarBidVO.getBidAmount());
+				userCarBid.setEmailAddress(userCarBidVO.getEmailAddress());
+				userCarBid.setPhoneNumber(userCarBidVO.getPhoneNumber());
 				userCarBidRepository.saveAndFlush(userCarBid);
 				userCarBidVO.setCreateNewOne(false);
 				responseMap.put("header", "successful insertion");
@@ -94,7 +96,9 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 			UserCarBid userCarBid = new UserCarBid();
 			userCarBid.setUserId(userCarBidVO.getUserId());
 			userCarBid.setCarName(userCarBidVO.getCar());
-			userCarBid.setBidAmount(userCarBidVO.getBidAmount());	
+			userCarBid.setBidAmount(userCarBidVO.getBidAmount());
+			userCarBid.setEmailAddress(userCarBidVO.getEmailAddress());
+			userCarBid.setPhoneNumber(userCarBidVO.getPhoneNumber());
 			userCarBidRepository.saveAndFlush(userCarBid);
 			responseMap.put("header", "successful insertion");
 		}
@@ -138,6 +142,20 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 			responseMap.put("userBidDetails", null);
 		}
 		
+		return responseMap;
+	}
+
+	@Override
+	public Map<String, Object> getAvailableCarForBid(UserCarBidVO userCarBidVO) {
+		Map<String,Object> responseMap = new HashMap<>();
+		List<CarDetails> carDetailsList = carDetailsRepository.findByCarAvailability(userCarBidVO.getCarAvailability());
+		if(!carDetailsList.isEmpty()) {
+			responseMap.put("header", "Available car's for Bidding...");
+			responseMap.put("carBidHistoryList", carDetailsList);
+		}else {
+			responseMap.put("header", "Sorry, currently no car's are available for bidding...");
+			responseMap.put("carBidHistoryList", carDetailsList);
+		}
 		return responseMap;
 	}
 }

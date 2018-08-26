@@ -14,8 +14,10 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.traderev.model.CarDetails;
 import com.traderev.model.UserCarBid;
 import com.traderev.repository.CarBidHistoryRepository;
+import com.traderev.repository.CarDetailsRepository;
 import com.traderev.service.UserCarBidServiceImpl;
 import com.traderev.vo.UserCarBidVO;
 
@@ -25,6 +27,9 @@ public class OnlineCarAuctionRetreiveTest {
 	
 	@Mock
 	CarBidHistoryRepository carBidHistoryRepository;
+	
+	@Mock
+	CarDetailsRepository carDetailsRepository;
 	
 	@InjectMocks
 	UserCarBidServiceImpl userCarBidService = new UserCarBidServiceImpl();
@@ -110,6 +115,37 @@ public class OnlineCarAuctionRetreiveTest {
 		userCarBidVO.setCar("Benz");
 		Map<String,Object> testResponseMap = userCarBidService.getWinningBid(userCarBidVO);
 		assertEquals(testResponseMap.get("header"),"There is a tie in the Bid among the user's, Please check the Bidding  History for further details....");
+		
+	}
+	
+	@Test
+	public void testGetAvailableCarForBid() {
+		List<CarDetails> carDetailsList = new ArrayList<>();
+		CarDetails carDetails = new CarDetails();
+		carDetails.setBasePrice(4599.0);
+		carDetails.setCarAvailability("Y");
+		carDetails.setCarCompany("Benz");
+		carDetails.setCarDetailsId(1L);
+		carDetails.setCarModel("2019");
+		carDetailsList.add(carDetails);
+		Mockito.when(carDetailsRepository.findByCarAvailability(Mockito.any(String.class))).thenReturn(carDetailsList);
+		
+		UserCarBidVO userCarBidVO = new UserCarBidVO();
+		userCarBidVO.setCarAvailability("Y");
+		Map<String,Object> testResponseMap = userCarBidService.getAvailableCarForBid(userCarBidVO);
+		assertEquals(testResponseMap.get("header"),"Available car's for Bidding...");
+		
+	}
+	
+	@Test
+	public void testGetAvailableCarForBid_No_List() {
+		List<CarDetails> carDetailsList = new ArrayList<>();
+		Mockito.when(carDetailsRepository.findByCarAvailability(Mockito.any(String.class))).thenReturn(carDetailsList);
+		
+		UserCarBidVO userCarBidVO = new UserCarBidVO();
+		userCarBidVO.setCarAvailability("Y");
+		Map<String,Object> testResponseMap = userCarBidService.getAvailableCarForBid(userCarBidVO);
+		assertEquals(testResponseMap.get("header"),"Sorry, currently no car's are available for bidding...");
 		
 	}
 

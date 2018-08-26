@@ -4,8 +4,11 @@ public class UserCarBidVO {
 
 	String userId;
 	String car;
+	String emailAddress;
+	String phoneNumber;
 	Double bidAmount;
 	boolean createNewOne;
+	String carAvailability;
 	
 	/**
 	 * @return the createNewOne
@@ -54,5 +57,41 @@ public class UserCarBidVO {
 	 */
 	public void setCar(String car) {
 		this.car = car;
+	}
+	/**
+	 * @return the carAvailability
+	 */
+	public String getCarAvailability() {
+		return carAvailability;
+	}
+	/**
+	 * @param carAvailability the carAvailability to set
+	 */
+	public void setCarAvailability(String carAvailability) {
+		this.carAvailability = carAvailability;
+	}
+	/**
+	 * @return the emailAddress
+	 */
+	public String getEmailAddress() {
+		return emailAddress;
+	}
+	/**
+	 * @param emailAddress the emailAddress to set
+	 */
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
+	}
+	/**
+	 * @return the phoneNumber
+	 */
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	/**
+	 * @param phoneNumber the phoneNumber to set
+	 */
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 }

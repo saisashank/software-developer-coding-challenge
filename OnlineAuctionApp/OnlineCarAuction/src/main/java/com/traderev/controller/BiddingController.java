@@ -33,4 +33,9 @@ public class BiddingController {
 	public Map<String,Object> getWinningBidForCar(@RequestBody UserCarBidVO userCarBidVO) {
 		return userCarBidService.getWinningBid(userCarBidVO);
 	}
+	
+	@RequestMapping(value="/getAvailableCarForBid",produces=MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
+	public Map<String,Object> getAvailableCarForBid(@RequestBody UserCarBidVO userCarBidVO) {
+		return userCarBidService.getAvailableCarForBid(userCarBidVO);
+	}
 }

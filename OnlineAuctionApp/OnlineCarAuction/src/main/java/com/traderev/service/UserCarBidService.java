@@ -13,4 +13,6 @@ public interface UserCarBidService {
 	Map<String,Object> getCarBiddingHistory(UserCarBidVO userCarBidVO);
 	
 	Map<String,Object> getWinningBid(UserCarBidVO userCarBidVO);
+	
+	Map<String,Object> getAvailableCarForBid(UserCarBidVO userCarBidVO);
 }
