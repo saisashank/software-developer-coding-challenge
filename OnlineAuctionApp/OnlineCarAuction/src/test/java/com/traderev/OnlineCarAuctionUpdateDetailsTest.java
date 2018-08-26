@@ -63,8 +63,7 @@ public class OnlineCarAuctionUpdateDetailsTest {
 	@Test
 	public void testUpdateCarDetails_Exception() {
 		String success = "Success";
-		CarDetails carDetails = null;
-		Mockito.when(carDetailsRepository.findByCarCompanyAndCarModel(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(carDetails);
+		Mockito.when(carDetailsRepository.findByCarCompanyAndCarModel(Mockito.any(String.class),Mockito.any(String.class))).thenThrow(Exception.class);
 		Mockito.when(carUpdateDetailsRepository.updateCarDetails(Mockito.any(CarDetailsVO.class))).thenReturn(success);
 		
 		
@@ -73,4 +72,42 @@ public class OnlineCarAuctionUpdateDetailsTest {
 		assertEquals(1,testResponseMap.size());
 	}
 
+	@Test
+	public void testCreateCarForBid_Existing() {
+		CarDetails carDetails = new CarDetails();
+		carDetails.setCarCompany("Toyota");
+		Mockito.when(carDetailsRepository.findByCarCompanyAndCarModel(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(carDetails);
+		
+		CarDetailsVO carDetailsVO = new CarDetailsVO();
+		carDetailsVO.setCarModel("2019");
+		Map<String,Object> testResponseMap = carDetailsService.createCarForBid(carDetailsVO);
+		assertEquals(2,testResponseMap.size());
+	}
+	
+	@Test
+	public void testCreateCarForBid() {
+		CarDetails carDetails = null;
+		CarDetails carDetailsNew = new CarDetails();
+		carDetailsNew.setCarAvailability("Y");
+		Mockito.when(carDetailsRepository.findByCarCompanyAndCarModel(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(carDetails);
+		Mockito.when(carDetailsRepository.saveAndFlush(Mockito.any(CarDetails.class))).thenReturn(carDetailsNew);
+		
+		
+		CarDetailsVO carDetailsVO = new CarDetailsVO();
+		carDetailsVO.setCarAvailability("Y");
+		Map<String,Object> testResponseMap = carDetailsService.createCarForBid(carDetailsVO);
+		assertEquals(1,testResponseMap.size());
+	}
+	
+	@Test
+	public void testCreateCarForBid_Exception() {
+		String success = "Success";
+		Mockito.when(carDetailsRepository.findByCarCompanyAndCarModel(Mockito.any(String.class),Mockito.any(String.class))).thenThrow(Exception.class);
+		Mockito.when(carUpdateDetailsRepository.updateCarDetails(Mockito.any(CarDetailsVO.class))).thenReturn(success);
+		
+		
+		CarDetailsVO carDetailsVO = null;
+		Map<String,Object> testResponseMap = carDetailsService.createCarForBid(carDetailsVO);
+		assertEquals(1,testResponseMap.size());
+	}
 }

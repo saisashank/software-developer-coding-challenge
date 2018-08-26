@@ -42,4 +42,29 @@ public class CarDetailsServiceImpl implements CarDetailsService{
 		return responseMap;
 	}
 
+	@Override
+	public Map<String, Object> createCarForBid(CarDetailsVO carDetailsVO) {
+		Map<String,Object> responseMap = new HashMap<>();
+		try {
+			CarDetails carDetails = carDetailsRepository.findByCarCompanyAndCarModel(carDetailsVO.getCarCompany(),carDetailsVO.getCarModel());
+			if(carDetails != null) {
+				responseMap.put("response","Requested car is already in the Auction... check for its availability status...");
+				responseMap.put("header", carDetails);
+			}else {
+				CarDetails carDetailsNew = new CarDetails();
+				carDetailsNew.setBasePrice(carDetailsVO.getBasePrice());
+				carDetailsNew.setCarAvailability(carDetailsVO.getCarAvailability());
+				carDetailsNew.setCarCompany(carDetailsVO.getCarCompany());
+				carDetailsNew.setCarModel(carDetailsVO.getCarModel());
+				carDetailsNew.setOdometerReading(carDetailsVO.getOdometerReading());
+				carDetailsRepository.saveAndFlush(carDetailsNew);
+				responseMap.put("response","successfully inserted new Car for Bid...");
+			}
+		}catch(Exception e) {
+			logger.info("Exception in the createCarForBid "+e);
+			responseMap.put("Exception occured is: ", e.getMessage());
+		}
+		return responseMap;
+	}
+
 }
