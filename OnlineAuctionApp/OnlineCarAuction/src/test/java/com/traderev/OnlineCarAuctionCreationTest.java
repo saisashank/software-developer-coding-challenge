@@ -33,6 +33,8 @@ public class OnlineCarAuctionCreationTest {
 		userCarBidVO.setUserId("Sashank");
 		userCarBidVO.setCar("Benz");
 		userCarBidVO.setBidAmount(35000.0);
+		userCarBidVO.setEmailAddress("shashank@gmail.com");
+		userCarBidVO.setPhoneNumber("354-645-4536");
 		
 		userCarBidService.saveUserBid(userCarBidVO);
 		
@@ -46,6 +48,8 @@ public class OnlineCarAuctionCreationTest {
 		userCarBidVO.setUserId("Sashank");
 		userCarBidVO.setCar("Benz");
 		userCarBidVO.setBidAmount(35000.0);
+		userCarBidVO.setEmailAddress("shashank@gmail.com");
+		userCarBidVO.setPhoneNumber("354-645-4536");
 		
 		userCarBidService.saveUserBid(userCarBidVO);
 		
@@ -59,6 +63,8 @@ public class OnlineCarAuctionCreationTest {
 		userCarBidVO.setUserId("Sashank");
 		userCarBidVO.setCar("Benz");
 		userCarBidVO.setBidAmount(35445.0);
+		userCarBidVO.setEmailAddress("shashank@gmail.com");
+		userCarBidVO.setPhoneNumber("354-645-4536");
 		userCarBidVO.setCreateNewOne(false);
 		
 		userCarBidService.saveUserBid(userCarBidVO);
@@ -73,6 +79,8 @@ public class OnlineCarAuctionCreationTest {
 		userCarBidVO.setUserId("Nani");
 		userCarBidVO.setCar("Benz");
 		userCarBidVO.setBidAmount(35000.0);
+		userCarBidVO.setEmailAddress("shashank@gmail.com");
+		userCarBidVO.setPhoneNumber("354-645-4536");
 		userCarBidVO.setCreateNewOne(true);
 		
 		userCarBidService.saveUserBid(userCarBidVO);
@@ -87,6 +95,8 @@ public class OnlineCarAuctionCreationTest {
 		userCarBidVO.setUserId("Nani");
 		userCarBidVO.setCar("Benz");
 		userCarBidVO.setBidAmount(35001.0);
+		userCarBidVO.setEmailAddress("shashank@gmail.com");
+		userCarBidVO.setPhoneNumber("354-645-4536");
 		userCarBidVO.setCreateNewOne(true);
 		
 		userCarBidService.saveUserBid(userCarBidVO);
@@ -102,6 +112,8 @@ public class OnlineCarAuctionCreationTest {
 		userCarBidVO.setUserId("Ravi");
 		userCarBidVO.setCar("Benz");
 		userCarBidVO.setBidAmount(35002.0);
+		userCarBidVO.setEmailAddress("shashank@gmail.com");
+		userCarBidVO.setPhoneNumber("354-645-4536");
 		userCarBidVO.setCreateNewOne(true);
 		
 		userCarBidService.saveUserBid(userCarBidVO);
@@ -117,6 +129,8 @@ public class OnlineCarAuctionCreationTest {
 		userCarBidVO.setUserId("Ravi");
 		userCarBidVO.setCar("Benz");
 		userCarBidVO.setBidAmount(350454.0);
+		userCarBidVO.setEmailAddress("shashank@gmail.com");
+		userCarBidVO.setPhoneNumber("354-645-4536");
 		userCarBidVO.setCreateNewOne(true);
 		
 		userCarBidService.saveUserBid(userCarBidVO);
@@ -132,6 +146,8 @@ public class OnlineCarAuctionCreationTest {
 		userCarBidVO.setUserId("Ravi");
 		userCarBidVO.setCar("Toyota");
 		userCarBidVO.setBidAmount(350454.0);
+		userCarBidVO.setEmailAddress("shashank@gmail.com");
+		userCarBidVO.setPhoneNumber("354-645-4536");
 		userCarBidVO.setCreateNewOne(true);
 		
 		userCarBidService.saveUserBid(userCarBidVO);

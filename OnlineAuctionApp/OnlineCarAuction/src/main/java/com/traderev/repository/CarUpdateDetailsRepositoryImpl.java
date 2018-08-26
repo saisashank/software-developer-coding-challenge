@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.traderev.model.CarDetails;
-import com.traderev.vo.UserCarBidVO;
 
 @Repository("carUpdateDetailsRepositoryImpl")
 public class CarUpdateDetailsRepositoryImpl implements CarUpdateDetailsRepository{
@@ -30,7 +29,7 @@ public class CarUpdateDetailsRepositoryImpl implements CarUpdateDetailsRepositor
 	private EntityManagerFactory entityManagerFactory;
 
 	@Override
-	public void updateCarAvailability(UserCarBidVO userCarBidVO) {
+	public String updateCarAvailability(String carName) {
 		EntityManager em = null;
 		try {
 			em = entityManagerFactory.createEntityManager();
@@ -41,8 +40,10 @@ public class CarUpdateDetailsRepositoryImpl implements CarUpdateDetailsRepositor
 			Root<CarDetails> updateCarDetails = updateQuery.from(CarDetails.class);
 			updateQuery.set(updateCarDetails.get("carAvailability"), "N");
 			List<Predicate> predicates = new ArrayList<>();
-			Predicate conditionOne = cb.equal(updateCarDetails.get("carCompany"),userCarBidVO.getCar());
-			predicates.add(conditionOne);
+			Predicate conditionOne = cb.equal(updateCarDetails.get("carCompany"),carName);
+			Predicate conditionTwo = cb.equal(updateCarDetails.get("carAvailability"),"Y");
+			Predicate combinedCondition = cb.and(conditionOne,conditionTwo);
+			predicates.add(combinedCondition);
 			Predicate combinedPredicate = cb.and(predicates.toArray(new Predicate[predicates.size()]));
 			updateQuery.where(combinedPredicate);
 			em.createQuery(updateQuery).executeUpdate();
@@ -55,6 +56,7 @@ public class CarUpdateDetailsRepositoryImpl implements CarUpdateDetailsRepositor
 				logger.info("closing entity manager in getCarHistoryBid");
 			}
 		}
+		return "Successful Updation of Car's Status";
 	}
-
+	
 }

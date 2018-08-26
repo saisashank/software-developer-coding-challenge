@@ -18,6 +18,7 @@ import com.traderev.model.CarDetails;
 import com.traderev.model.UserCarBid;
 import com.traderev.repository.CarBidHistoryRepository;
 import com.traderev.repository.CarDetailsRepository;
+import com.traderev.repository.CarUpdateDetailsRepository;
 import com.traderev.service.UserCarBidServiceImpl;
 import com.traderev.vo.UserCarBidVO;
 
@@ -27,6 +28,9 @@ public class OnlineCarAuctionRetreiveTest {
 	
 	@Mock
 	CarBidHistoryRepository carBidHistoryRepository;
+	
+	@Mock
+	CarUpdateDetailsRepository carUpdateDetailsRepository;
 	
 	@Mock
 	CarDetailsRepository carDetailsRepository;
@@ -67,16 +71,24 @@ public class OnlineCarAuctionRetreiveTest {
 	@Test
 	public void testGetWinningBid() {
 		List<UserCarBid> userCarBidList = new ArrayList<>();
+		String message = "Success";
 		UserCarBid userCarBid = new UserCarBid();
 		userCarBid.setUserCarBidId(1L);
 		userCarBid.setUserId("Sashank");
 		userCarBid.setBidAmount(35000.0);
-		userCarBid.setCarName("Benz");
+		userCarBid.setCarName("Nissan");
+		userCarBid.setEmailAddress("shashank@gmail.com");
+		userCarBid.setPhoneNumber("354-645-4536");
 		userCarBidList.add(userCarBid);
 		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class))).thenReturn(userCarBidList);
+		Mockito.when(carUpdateDetailsRepository.updateCarAvailability(Mockito.any(String.class))).thenReturn(message);
 		
 		UserCarBidVO userCarBidVO = new UserCarBidVO();
-		userCarBidVO.setCar("Benz");
+		userCarBidVO.setCar("Nissan");
+		userCarBidVO.setUserId("Sashank");
+		userCarBidVO.setBidAmount(35000.0);
+		userCarBidVO.setEmailAddress("shashank@gmail.com");
+		userCarBidVO.setPhoneNumber("354-645-4536");
 		Map<String,Object> testResponseMap = userCarBidService.getWinningBid(userCarBidVO);
 		assertEquals(testResponseMap.get("header"),"Winning Bid for a car");
 		

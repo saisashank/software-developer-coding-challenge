@@ -138,7 +138,7 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 				responseMap.put("header", "There is a tie in the Bid among the user's, Please check the Bidding  History for further details....");
 				responseMap.put("userBidDetails", null);
 			}else {
-				carUpdateDetailsRepository.updateCarAvailability(userCarBidVO);
+				carUpdateDetailsRepository.updateCarAvailability(userCarBidVO.getCar());
 				responseMap.put("header", "Winning Bid for a car");
 				responseMap.put("userBidDetails", userWinningBid);
 			}
