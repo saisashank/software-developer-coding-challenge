@@ -43,7 +43,7 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 	public Map<String,Object> saveUserBid(UserCarBidVO userCarBidVO) {
 		Map<String,Object> responseMap = new HashMap<>();
 		CarDetails carDetails = carDetailsRepository.findByCarCompany(userCarBidVO.getCar());
-		List<UserCarBid> userCarBidRepo = getCarBiddingHistory(userCarBidVO);
+		List<UserCarBid> userCarBidRepo = carBidHistoryRepository.getCarHistoryBid(userCarBidVO.getCar());
 		if(carDetails != null && carDetails.getCarAvailability().equals("Y")) {
 			if(userCarBidVO.getBidAmount() > carDetails.getBasePrice()) {
 				responseMap=initialCreationBid(userCarBidRepo,userCarBidVO);
@@ -101,8 +101,17 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 		return responseMap;
 	}
 	@Override
-	public List<UserCarBid> getCarBiddingHistory(UserCarBidVO userCarBidVO) {
-		return  carBidHistoryRepository.getCarHistoryBid(userCarBidVO.getCar());
+	public Map<String,Object> getCarBiddingHistory(UserCarBidVO userCarBidVO) {
+		Map<String,Object> responseMap = new HashMap<>();
+		List<UserCarBid> userCarBidList =  carBidHistoryRepository.getCarHistoryBid(userCarBidVO.getCar());
+		if(!userCarBidList.isEmpty()) {
+			responseMap.put("header", "Car's Bidding History");
+			responseMap.put("carBidHistoryList", userCarBidList);
+		}else {
+			responseMap.put("header", "No Bidding history registered on this car...");
+			responseMap.put("carBidHistoryList", userCarBidList);
+		}
+		return responseMap;
 	}
 
 	@Override
@@ -110,19 +119,25 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 		Map<String,Object> responseMap = new HashMap<>();
 		int count = 0;
 		List<UserCarBid> userCarBidList =carBidHistoryRepository.getCarHistoryBid(userCarBidVO.getCar());
-		UserCarBid userWinningBid = userCarBidList.get(0);
-		for(UserCarBid userCarBid:userCarBidList) {
-			if(userCarBid.getBidAmount().equals(userWinningBid.getBidAmount())) {
-				count++;
+		if(!userCarBidList.isEmpty()) {
+			UserCarBid userWinningBid = userCarBidList.get(0);
+			for(UserCarBid userCarBid:userCarBidList) {
+				if(userCarBid.getBidAmount().equals(userWinningBid.getBidAmount())) {
+					count++;
+				}
 			}
-		}
-		if(count>1) {
-			responseMap.put("header", "There is a tie in the Bid among the user's, Please check the Bidding  History for further details....");
-			responseMap.put("userBidDetails", null);
+			if(count>1) {
+				responseMap.put("header", "There is a tie in the Bid among the user's, Please check the Bidding  History for further details....");
+				responseMap.put("userBidDetails", null);
+			}else {
+				responseMap.put("header", "Winning Bid for a car");
+				responseMap.put("userBidDetails", userWinningBid);
+			}
 		}else {
-			responseMap.put("header", "Winning Bid for a car");
-			responseMap.put("userBidDetails", userWinningBid);
+			responseMap.put("header", "No Bid has been made on the car...");
+			responseMap.put("userBidDetails", null);
 		}
+		
 		return responseMap;
 	}
 }

@@ -42,8 +42,20 @@ public class OnlineCarAuctionRetreiveTest {
 		
 		UserCarBidVO userCarBidVO = new UserCarBidVO();
 		userCarBidVO.setCar("Benz");
-		List<UserCarBid> userCarBidTestList =userCarBidService.getCarBiddingHistory(userCarBidVO);
-		assertEquals(userCarBidTestList.size(),1);
+		Map<String,Object> userCarBidTestList =userCarBidService.getCarBiddingHistory(userCarBidVO);
+		assertEquals(userCarBidTestList.size(),2);
+		
+	}
+	
+	@Test
+	public void testGetCarBiddingHistory_No_List() {
+		List<UserCarBid> userCarBidList = new ArrayList<>();
+		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class))).thenReturn(userCarBidList);
+		
+		UserCarBidVO userCarBidVO = new UserCarBidVO();
+		userCarBidVO.setCar("Benz");
+		Map<String,Object> userCarBidTestList =userCarBidService.getCarBiddingHistory(userCarBidVO);
+		assertEquals(userCarBidTestList.size(),2);
 		
 	}
 	
@@ -62,6 +74,18 @@ public class OnlineCarAuctionRetreiveTest {
 		userCarBidVO.setCar("Benz");
 		Map<String,Object> testResponseMap = userCarBidService.getWinningBid(userCarBidVO);
 		assertEquals(testResponseMap.get("header"),"Winning Bid for a car");
+		
+	}
+	
+	@Test
+	public void testGetWinningBid_No_List() {
+		List<UserCarBid> userCarBidList = new ArrayList<>();
+		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class))).thenReturn(userCarBidList);
+		
+		UserCarBidVO userCarBidVO = new UserCarBidVO();
+		userCarBidVO.setCar("Benz");
+		Map<String,Object> testResponseMap = userCarBidService.getWinningBid(userCarBidVO);
+		assertEquals(testResponseMap.get("header"),"No Bid has been made on the car...");
 		
 	}
 	
