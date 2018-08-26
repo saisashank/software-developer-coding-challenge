@@ -12,6 +12,7 @@ import com.traderev.model.UserCarBid;
 import com.traderev.repository.CarBidAmountRepository;
 import com.traderev.repository.CarBidHistoryRepository;
 import com.traderev.repository.CarDetailsRepository;
+import com.traderev.repository.CarUpdateDetailsRepository;
 import com.traderev.repository.UserCarBidRepository;
 import com.traderev.vo.UserCarBidVO;
 
@@ -29,6 +30,9 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 	
 	@Autowired
 	CarDetailsRepository carDetailsRepository;
+	
+	@Autowired
+	CarUpdateDetailsRepository carUpdateDetailsRepository;
 	
 	@Override
 	public boolean findUserRelatedCar(UserCarBidVO userCarBidVO) {
@@ -134,6 +138,7 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 				responseMap.put("header", "There is a tie in the Bid among the user's, Please check the Bidding  History for further details....");
 				responseMap.put("userBidDetails", null);
 			}else {
+				carUpdateDetailsRepository.updateCarAvailability(userCarBidVO);
 				responseMap.put("header", "Winning Bid for a car");
 				responseMap.put("userBidDetails", userWinningBid);
 			}

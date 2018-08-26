@@ -17,34 +17,32 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import com.traderev.model.UserCarBid;
+import com.traderev.model.CarDetails;
 import com.traderev.vo.UserCarBidVO;
 
-@Repository("userCarBidRepositoryImpl")
-public class UserCarBidRepositoryImpl implements CarBidAmountRepository {
+@Repository("carUpdateDetailsRepositoryImpl")
+public class CarUpdateDetailsRepositoryImpl implements CarUpdateDetailsRepository{
 	
-	private final Logger logger = LoggerFactory.getLogger(UserCarBidRepositoryImpl.class);
+	private final Logger logger = LoggerFactory.getLogger(CarUpdateDetailsRepositoryImpl.class);
 	
 	@PersistenceUnit(unitName="tradeRevApp")
 	@Qualifier("tradeRevEntityManagerFactory")
 	private EntityManagerFactory entityManagerFactory;
-	
+
 	@Override
-	public void updateUserCarBid(UserCarBidVO userCarBidVO) {
+	public void updateCarAvailability(UserCarBidVO userCarBidVO) {
 		EntityManager em = null;
 		try {
 			em = entityManagerFactory.createEntityManager();
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			EntityTransaction transaction = em.getTransaction();
 			transaction.begin();
-			CriteriaUpdate<UserCarBid> updateQuery = cb.createCriteriaUpdate(UserCarBid.class);
-			Root<UserCarBid> updateUserCarBid = updateQuery.from(UserCarBid.class);
-			updateQuery.set(updateUserCarBid.get("bidAmount"), userCarBidVO.getBidAmount());
+			CriteriaUpdate<CarDetails> updateQuery = cb.createCriteriaUpdate(CarDetails.class);
+			Root<CarDetails> updateCarDetails = updateQuery.from(CarDetails.class);
+			updateQuery.set(updateCarDetails.get("carAvailability"), "N");
 			List<Predicate> predicates = new ArrayList<>();
-			Predicate conditionOne = cb.equal(updateUserCarBid.get("userId"),userCarBidVO.getUserId());
-			Predicate conditionTwo = cb.equal(updateUserCarBid.get("carName"),userCarBidVO.getCar());
-			Predicate combinedCondition = cb.and(conditionOne,conditionTwo);
-			predicates.add(combinedCondition);
+			Predicate conditionOne = cb.equal(updateCarDetails.get("carCompany"),userCarBidVO.getCar());
+			predicates.add(conditionOne);
 			Predicate combinedPredicate = cb.and(predicates.toArray(new Predicate[predicates.size()]));
 			updateQuery.where(combinedPredicate);
 			em.createQuery(updateQuery).executeUpdate();
@@ -58,4 +56,5 @@ public class UserCarBidRepositoryImpl implements CarBidAmountRepository {
 			}
 		}
 	}
+
 }
