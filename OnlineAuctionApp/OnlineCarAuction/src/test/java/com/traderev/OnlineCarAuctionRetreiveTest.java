@@ -69,6 +69,17 @@ public class OnlineCarAuctionRetreiveTest {
 	}
 	
 	@Test
+	public void testGetCarBiddingHistory_Exception() {
+		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class))).thenThrow(Exception.class);
+		
+		UserCarBidVO userCarBidVO = new UserCarBidVO();
+		userCarBidVO.setCar(null);
+		Map<String,Object> userCarBidTestList =userCarBidService.getCarBiddingHistory(userCarBidVO);
+		assertEquals(userCarBidTestList.size(),1);
+		
+	}
+	
+	@Test
 	public void testGetWinningBid() {
 		List<UserCarBid> userCarBidList = new ArrayList<>();
 		String message = "Success";
@@ -103,6 +114,17 @@ public class OnlineCarAuctionRetreiveTest {
 		userCarBidVO.setCar("Benz");
 		Map<String,Object> testResponseMap = userCarBidService.getWinningBid(userCarBidVO);
 		assertEquals(testResponseMap.get("header"),"No Bid has been made on the car...");
+		
+	}
+	
+	@Test
+	public void testGetWinningBid_Exception() {
+		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class))).thenThrow(Exception.class);
+		
+		UserCarBidVO userCarBidVO = new UserCarBidVO();
+		userCarBidVO.setCar(null);
+		Map<String,Object> testResponseMap = userCarBidService.getWinningBid(userCarBidVO);
+		assertEquals(testResponseMap.size(),1);
 		
 	}
 	
@@ -158,6 +180,17 @@ public class OnlineCarAuctionRetreiveTest {
 		userCarBidVO.setCarAvailability("Y");
 		Map<String,Object> testResponseMap = userCarBidService.getAvailableCarForBid(userCarBidVO);
 		assertEquals(testResponseMap.get("header"),"Sorry, currently no car's are available for bidding...");
+		
+	}
+	
+	@Test
+	public void testGetAvailableCarForBid_Exception() {
+		Mockito.when(carDetailsRepository.findByCarAvailability(Mockito.any(String.class))).thenThrow(Exception.class);
+		
+		UserCarBidVO userCarBidVO = new UserCarBidVO();
+		userCarBidVO.setCarAvailability(null);
+		Map<String,Object> testResponseMap = userCarBidService.getAvailableCarForBid(userCarBidVO);
+		assertEquals(testResponseMap.size(),1);
 		
 	}
 

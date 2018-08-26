@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ import com.traderev.vo.UserCarBidVO;
 
 @Service
 public class UserCarBidServiceImpl implements UserCarBidService {
+	
+	private final Logger logger = LoggerFactory.getLogger(UserCarBidServiceImpl.class);
 
 	@Autowired
 	UserCarBidRepository userCarBidRepository;
@@ -46,27 +50,32 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 	@Override
 	public Map<String,Object> saveUserBid(UserCarBidVO userCarBidVO) {
 		Map<String,Object> responseMap = new HashMap<>();
-		CarDetails carDetails = carDetailsRepository.findByCarCompany(userCarBidVO.getCar());
-		List<UserCarBid> userCarBidRepo = carBidHistoryRepository.getCarHistoryBid(userCarBidVO.getCar());
-		if(carDetails != null && carDetails.getCarAvailability().equals("Y")) {
-			if(userCarBidVO.getBidAmount() > carDetails.getBasePrice()) {
-				responseMap=initialCreationBid(userCarBidRepo,userCarBidVO);
-				for(UserCarBid userCarBidList : userCarBidRepo) {
-					UserCarBid carCurrentHighestBid = userCarBidRepo.get(0);
-					if(userCarBidVO.getBidAmount() > carCurrentHighestBid.getBidAmount()) {
-						responseMap=createUpdateBid(userCarBidList,userCarBidVO);
-					}else {
-						responseMap.put("header", "unsuccessful insertion/updation as the bid is less than or equal to the highest bid");
+		try {
+			CarDetails carDetails = carDetailsRepository.findByCarCompany(userCarBidVO.getCar());
+			List<UserCarBid> userCarBidRepo = carBidHistoryRepository.getCarHistoryBid(userCarBidVO.getCar());
+			if(carDetails != null && carDetails.getCarAvailability().equals("Y")) {
+				if(userCarBidVO.getBidAmount() > carDetails.getBasePrice()) {
+					responseMap=initialCreationBid(userCarBidRepo,userCarBidVO);
+					for(UserCarBid userCarBidList : userCarBidRepo) {
+						UserCarBid carCurrentHighestBid = userCarBidRepo.get(0);
+						if(userCarBidVO.getBidAmount() > carCurrentHighestBid.getBidAmount()) {
+							responseMap=createUpdateBid(userCarBidList,userCarBidVO);
+						}else {
+							responseMap.put("header", "unsuccessful insertion/updation as the bid is less than or equal to the highest bid");
+						}
 					}
+				}else {
+					responseMap.put("header", "Sorry, Bidding Price is less than the base price set...");
+					responseMap.put("userCarBidVO", userCarBidVO);
 				}
+				
 			}else {
-				responseMap.put("header", "Sorry, Bidding Price is less than the base price set...");
-				responseMap.put("userCarBidVO", userCarBidVO);
+				responseMap.put("header", "Sorry, Requested Car is not available for Auction...");
+				responseMap.put("userCarBidVO", null);
 			}
-			
-		}else {
-			responseMap.put("header", "Sorry, Requested Car is not available for Auction...");
-			responseMap.put("userCarBidVO", null);
+		}catch(Exception e) {
+			logger.info("Exception in the saveUserBid "+e);
+			responseMap.put("Exception occured is: ", e.getMessage());
 		}
 		return responseMap;
 	}
@@ -111,13 +120,18 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 	@Override
 	public Map<String,Object> getCarBiddingHistory(UserCarBidVO userCarBidVO) {
 		Map<String,Object> responseMap = new HashMap<>();
-		List<UserCarBid> userCarBidList =  carBidHistoryRepository.getCarHistoryBid(userCarBidVO.getCar());
-		if(!userCarBidList.isEmpty()) {
-			responseMap.put("header", "Car's Bidding History");
-			responseMap.put("carBidHistoryList", userCarBidList);
-		}else {
-			responseMap.put("header", "No Bidding history registered on this car...");
-			responseMap.put("carBidHistoryList", userCarBidList);
+		try {
+			List<UserCarBid> userCarBidList =  carBidHistoryRepository.getCarHistoryBid(userCarBidVO.getCar());
+			if(!userCarBidList.isEmpty()) {
+				responseMap.put("header", "Car's Bidding History");
+				responseMap.put("carBidHistoryList", userCarBidList);
+			}else {
+				responseMap.put("header", "No Bidding history registered on this car...");
+				responseMap.put("carBidHistoryList", userCarBidList);
+			}
+		}catch(Exception e) {
+			logger.info("Exception in the getCarBiddingHistory "+e);
+			responseMap.put("Exception occured is: ", e.getMessage());
 		}
 		return responseMap;
 	}
@@ -126,40 +140,49 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 	public Map<String,Object> getWinningBid(UserCarBidVO userCarBidVO) {
 		Map<String,Object> responseMap = new HashMap<>();
 		int count = 0;
-		List<UserCarBid> userCarBidList =carBidHistoryRepository.getCarHistoryBid(userCarBidVO.getCar());
-		if(!userCarBidList.isEmpty()) {
-			UserCarBid userWinningBid = userCarBidList.get(0);
-			for(UserCarBid userCarBid:userCarBidList) {
-				if(userCarBid.getBidAmount().equals(userWinningBid.getBidAmount())) {
-					count++;
+		try {
+			List<UserCarBid> userCarBidList =carBidHistoryRepository.getCarHistoryBid(userCarBidVO.getCar());
+			if(!userCarBidList.isEmpty()) {
+				UserCarBid userWinningBid = userCarBidList.get(0);
+				for(UserCarBid userCarBid:userCarBidList) {
+					if(userCarBid.getBidAmount().equals(userWinningBid.getBidAmount())) {
+						count++;
+					}
 				}
-			}
-			if(count>1) {
-				responseMap.put("header", "There is a tie in the Bid among the user's, Please check the Bidding  History for further details....");
-				responseMap.put("userBidDetails", null);
+				if(count>1) {
+					responseMap.put("header", "There is a tie in the Bid among the user's, Please check the Bidding  History for further details....");
+					responseMap.put("userBidDetails", null);
+				}else {
+					carUpdateDetailsRepository.updateCarAvailability(userCarBidVO.getCar());
+					responseMap.put("header", "Winning Bid for a car");
+					responseMap.put("userBidDetails", userWinningBid);
+				}
 			}else {
-				carUpdateDetailsRepository.updateCarAvailability(userCarBidVO.getCar());
-				responseMap.put("header", "Winning Bid for a car");
-				responseMap.put("userBidDetails", userWinningBid);
+				responseMap.put("header", "No Bid has been made on the car...");
+				responseMap.put("userBidDetails", null);
 			}
-		}else {
-			responseMap.put("header", "No Bid has been made on the car...");
-			responseMap.put("userBidDetails", null);
+		}catch(Exception e) {
+			logger.info("Exception in the getWinningBid "+e);
+			responseMap.put("Exception occured is: ", e.getMessage());
 		}
-		
 		return responseMap;
 	}
 
 	@Override
 	public Map<String, Object> getAvailableCarForBid(UserCarBidVO userCarBidVO) {
 		Map<String,Object> responseMap = new HashMap<>();
-		List<CarDetails> carDetailsList = carDetailsRepository.findByCarAvailability(userCarBidVO.getCarAvailability());
-		if(!carDetailsList.isEmpty()) {
-			responseMap.put("header", "Available car's for Bidding...");
-			responseMap.put("carBidHistoryList", carDetailsList);
-		}else {
-			responseMap.put("header", "Sorry, currently no car's are available for bidding...");
-			responseMap.put("carBidHistoryList", carDetailsList);
+		try {
+			List<CarDetails> carDetailsList = carDetailsRepository.findByCarAvailability(userCarBidVO.getCarAvailability());
+			if(!carDetailsList.isEmpty()) {
+				responseMap.put("header", "Available car's for Bidding...");
+				responseMap.put("carBidHistoryList", carDetailsList);
+			}else {
+				responseMap.put("header", "Sorry, currently no car's are available for bidding...");
+				responseMap.put("carBidHistoryList", carDetailsList);
+			}
+		}catch(Exception e) {
+			logger.info("Exception in the getWinningBid "+e);
+			responseMap.put("Exception occured is: ", e.getMessage());
 		}
 		return responseMap;
 	}
