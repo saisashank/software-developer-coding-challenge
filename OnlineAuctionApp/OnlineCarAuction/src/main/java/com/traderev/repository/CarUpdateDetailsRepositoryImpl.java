@@ -66,7 +66,7 @@ public class CarUpdateDetailsRepositoryImpl implements CarUpdateDetailsRepositor
 	public String updateCarDetails(CarDetailsVO carDetailsVO) {
 		EntityManager em = null;
 		try {
-			if(carDetailsVO.getBasePrice() != null || !StringUtils.isEmpty(carDetailsVO.getCarModel())) {
+			if(carDetailsVO.getBasePrice() != null || !StringUtils.isEmpty(carDetailsVO.getOdometerReading())) {
 				em = entityManagerFactory.createEntityManager();
 				CriteriaBuilder cb = em.getCriteriaBuilder();
 				EntityTransaction transaction = em.getTransaction();
@@ -74,8 +74,8 @@ public class CarUpdateDetailsRepositoryImpl implements CarUpdateDetailsRepositor
 				CriteriaUpdate<CarDetails> updateQuery = cb.createCriteriaUpdate(CarDetails.class);
 				Root<CarDetails> updateCarDetails = updateQuery.from(CarDetails.class);
 				
-				if(!StringUtils.isEmpty(carDetailsVO.getCarModel())) {
-					updateQuery.set(updateCarDetails.get("carModel"), carDetailsVO.getCarModel());
+				if(!StringUtils.isEmpty(carDetailsVO.getOdometerReading())) {
+					updateQuery.set(updateCarDetails.get("odometerReading"), carDetailsVO.getOdometerReading());
 				}
 				
 				if(carDetailsVO.getBasePrice() != null) {
@@ -83,7 +83,9 @@ public class CarUpdateDetailsRepositoryImpl implements CarUpdateDetailsRepositor
 				}
 				List<Predicate> predicates = new ArrayList<>();
 				Predicate conditionOne = cb.equal(updateCarDetails.get("carCompany"),carDetailsVO.getCarCompany());
-				predicates.add(conditionOne);
+				Predicate conditionTwo = cb.equal(updateCarDetails.get("carModel"),carDetailsVO.getCarModel());
+				Predicate combinedCondition = cb.and(conditionOne,conditionTwo);
+				predicates.add(combinedCondition);
 				Predicate combinedPredicate = cb.and(predicates.toArray(new Predicate[predicates.size()]));
 				updateQuery.where(combinedPredicate);
 				em.createQuery(updateQuery).executeUpdate();

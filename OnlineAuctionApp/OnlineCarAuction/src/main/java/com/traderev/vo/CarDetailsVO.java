@@ -5,6 +5,7 @@ public class CarDetailsVO {
 	private String carCompany;
 	private String carModel;
 	private Double basePrice;
+	private String odometerReading;
 	/**
 	 * @return the carCompany
 	 */
@@ -40,5 +41,17 @@ public class CarDetailsVO {
 	 */
 	public void setBasePrice(Double basePrice) {
 		this.basePrice = basePrice;
+	}
+	/**
+	 * @return the odometerReading
+	 */
+	public String getOdometerReading() {
+		return odometerReading;
+	}
+	/**
+	 * @param odometerReading the odometerReading to set
+	 */
+	public void setOdometerReading(String odometerReading) {
+		this.odometerReading = odometerReading;
 	}
 }

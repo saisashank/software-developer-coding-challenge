@@ -18,13 +18,14 @@ create table CAR_DTLS
    CAR_MDL varchar(255) not null,
    CAR_AVLBTY char(1) not null,
    BASE_PRCE double not null,
+   ODOMTR_RDNG varchar(255) not null,
    primary key(CAR_DTLS_ID)
 );
 
 
 
-insert into CAR_DTLS values(1,'Toyota', '2019 Toyota C-HR', 'N',10000);
-insert into CAR_DTLS values(2,'Benz', '2019 Mercedes-Benz C-Class', 'Y',20000);
-insert into CAR_DTLS values(3,'Nissan', '2018 Nissan GT-R', 'Y',15000);
-insert into CAR_DTLS values(4,'Honda', '2018 Honda CR-V', 'Y',14000);
-insert into CAR_DTLS values(5,'Hyundai', '2019 Hyundai Santa Fe', 'Y',12000);
+insert into CAR_DTLS values(1,'Toyota', '2019 Toyota C-HR', 'N',10000,'57k');
+insert into CAR_DTLS values(2,'Benz', '2019 Mercedes-Benz C-Class', 'Y',20000,'19k');
+insert into CAR_DTLS values(3,'Nissan', '2018 Nissan GT-R', 'Y',15000,'35k');
+insert into CAR_DTLS values(4,'Honda', '2018 Honda CR-V', 'Y',14000,'45k');
+insert into CAR_DTLS values(5,'Hyundai', '2019 Hyundai Santa Fe', 'Y',12000,'78k');

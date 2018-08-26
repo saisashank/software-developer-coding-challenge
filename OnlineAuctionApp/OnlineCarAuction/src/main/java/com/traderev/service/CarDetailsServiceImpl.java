@@ -28,7 +28,7 @@ public class CarDetailsServiceImpl implements CarDetailsService{
 	public Map<String, Object> updateCarDetails(CarDetailsVO carDetailsVO) {
 		Map<String,Object> responseMap = new HashMap<>();
 		try {
-			CarDetails carDetails = carDetailsRepository.findByCarCompany(carDetailsVO.getCarCompany());
+			CarDetails carDetails = carDetailsRepository.findByCarCompanyAndCarModel(carDetailsVO.getCarCompany(),carDetailsVO.getCarModel());
 			if(carDetails != null) {
 				String success = carUpdateDetailsRepository.updateCarDetails(carDetailsVO);
 				responseMap.put("response",success);

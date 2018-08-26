@@ -36,7 +36,7 @@ public class OnlineCarAuctionUpdateDetailsTest {
 		String success = "Success";
 		CarDetails carDetails = new CarDetails();
 		carDetails.setCarCompany("Toyota");
-		Mockito.when(carDetailsRepository.findByCarCompany(Mockito.any(String.class))).thenReturn(carDetails);
+		Mockito.when(carDetailsRepository.findByCarCompanyAndCarModel(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(carDetails);
 		Mockito.when(carUpdateDetailsRepository.updateCarDetails(Mockito.any(CarDetailsVO.class))).thenReturn(success);
 		
 		
@@ -50,7 +50,7 @@ public class OnlineCarAuctionUpdateDetailsTest {
 	public void testUpdateCarDetails_No_Car_Available() {
 		String success = "Success";
 		CarDetails carDetails = null;
-		Mockito.when(carDetailsRepository.findByCarCompany(Mockito.any(String.class))).thenReturn(carDetails);
+		Mockito.when(carDetailsRepository.findByCarCompanyAndCarModel(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(carDetails);
 		Mockito.when(carUpdateDetailsRepository.updateCarDetails(Mockito.any(CarDetailsVO.class))).thenReturn(success);
 		
 		
@@ -64,7 +64,7 @@ public class OnlineCarAuctionUpdateDetailsTest {
 	public void testUpdateCarDetails_Exception() {
 		String success = "Success";
 		CarDetails carDetails = null;
-		Mockito.when(carDetailsRepository.findByCarCompany(Mockito.any(String.class))).thenReturn(carDetails);
+		Mockito.when(carDetailsRepository.findByCarCompanyAndCarModel(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(carDetails);
 		Mockito.when(carUpdateDetailsRepository.updateCarDetails(Mockito.any(CarDetailsVO.class))).thenReturn(success);
 		
 		

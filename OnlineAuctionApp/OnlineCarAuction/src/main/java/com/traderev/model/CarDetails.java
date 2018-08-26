@@ -30,6 +30,9 @@ public class CarDetails {
 	
 	@Column(name="BASE_PRCE")
 	private Double basePrice;
+	
+	@Column(name="ODOMTR_RDNG")
+	private String odometerReading;
 
 	/**
 	 * @return the carDetailsId
@@ -99,5 +102,19 @@ public class CarDetails {
 	 */
 	public void setBasePrice(Double basePrice) {
 		this.basePrice = basePrice;
+	}
+
+	/**
+	 * @return the odometerReading
+	 */
+	public String getOdometerReading() {
+		return odometerReading;
+	}
+
+	/**
+	 * @param odometerReading the odometerReading to set
+	 */
+	public void setOdometerReading(String odometerReading) {
+		this.odometerReading = odometerReading;
 	}
 }
