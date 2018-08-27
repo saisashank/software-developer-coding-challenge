@@ -47,7 +47,7 @@ public class OnlineCarAuctionRetreiveTest {
 		userCarBid.setBidAmount(35000.0);
 		userCarBid.setCarName("Benz");
 		userCarBidList.add(userCarBid);
-		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class))).thenReturn(userCarBidList);
+		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userCarBidList);
 		
 		UserCarBidVO userCarBidVO = new UserCarBidVO();
 		userCarBidVO.setCar("Benz");
@@ -59,7 +59,7 @@ public class OnlineCarAuctionRetreiveTest {
 	@Test
 	public void testGetCarBiddingHistory_No_List() {
 		List<UserCarBid> userCarBidList = new ArrayList<>();
-		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class))).thenReturn(userCarBidList);
+		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userCarBidList);
 		
 		UserCarBidVO userCarBidVO = new UserCarBidVO();
 		userCarBidVO.setCar("Benz");
@@ -70,7 +70,7 @@ public class OnlineCarAuctionRetreiveTest {
 	
 	@Test
 	public void testGetCarBiddingHistory_Exception() {
-		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class))).thenThrow(Exception.class);
+		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class),Mockito.any(String.class))).thenThrow(Exception.class);
 		
 		UserCarBidVO userCarBidVO = new UserCarBidVO();
 		userCarBidVO.setCar(null);
@@ -91,8 +91,8 @@ public class OnlineCarAuctionRetreiveTest {
 		userCarBid.setEmailAddress("shashank@gmail.com");
 		userCarBid.setPhoneNumber("354-645-4536");
 		userCarBidList.add(userCarBid);
-		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class))).thenReturn(userCarBidList);
-		Mockito.when(carUpdateDetailsRepository.updateCarAvailability(Mockito.any(String.class))).thenReturn(message);
+		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userCarBidList);
+		Mockito.when(carUpdateDetailsRepository.updateCarAvailability(Mockito.any(String.class),Mockito.any(String.class),Mockito.any(String.class))).thenReturn(message);
 		
 		UserCarBidVO userCarBidVO = new UserCarBidVO();
 		userCarBidVO.setCar("Nissan");
@@ -108,7 +108,7 @@ public class OnlineCarAuctionRetreiveTest {
 	@Test
 	public void testGetWinningBid_No_List() {
 		List<UserCarBid> userCarBidList = new ArrayList<>();
-		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class))).thenReturn(userCarBidList);
+		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userCarBidList);
 		
 		UserCarBidVO userCarBidVO = new UserCarBidVO();
 		userCarBidVO.setCar("Benz");
@@ -119,7 +119,7 @@ public class OnlineCarAuctionRetreiveTest {
 	
 	@Test
 	public void testGetWinningBid_Exception() {
-		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class))).thenThrow(Exception.class);
+		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class),Mockito.any(String.class))).thenThrow(Exception.class);
 		
 		UserCarBidVO userCarBidVO = new UserCarBidVO();
 		userCarBidVO.setCar(null);
@@ -143,7 +143,7 @@ public class OnlineCarAuctionRetreiveTest {
 		userCarBid2.setCarName("Benz");
 		userCarBidList.add(userCarBid1);
 		userCarBidList.add(userCarBid2);
-		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class))).thenReturn(userCarBidList);
+		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userCarBidList);
 		
 		UserCarBidVO userCarBidVO = new UserCarBidVO();
 		userCarBidVO.setCar("Benz");
@@ -197,7 +197,7 @@ public class OnlineCarAuctionRetreiveTest {
 	@Test
 	public void testChangeStatusOfCar() {
 		String message = "success";
-		Mockito.when(carUpdateDetailsRepository.updateCarAvailability(Mockito.any(String.class))).thenReturn(message);
+		Mockito.when(carUpdateDetailsRepository.updateCarAvailability(Mockito.any(String.class),Mockito.any(String.class),Mockito.any(String.class))).thenReturn(message);
 		
 		UserCarBidVO userCarBidVO = new UserCarBidVO();
 		userCarBidVO.setCar("Toyota");
@@ -208,7 +208,7 @@ public class OnlineCarAuctionRetreiveTest {
 	
 	@Test
 	public void testChangeStatusOfCar_Exception() {
-		Mockito.when(carUpdateDetailsRepository.updateCarAvailability(Mockito.any(String.class))).thenThrow(Exception.class);
+		Mockito.when(carUpdateDetailsRepository.updateCarAvailability(Mockito.any(String.class),Mockito.any(String.class),Mockito.any(String.class))).thenThrow(Exception.class);
 		
 		UserCarBidVO userCarBidVO = new UserCarBidVO();
 		userCarBidVO.setCar(null);

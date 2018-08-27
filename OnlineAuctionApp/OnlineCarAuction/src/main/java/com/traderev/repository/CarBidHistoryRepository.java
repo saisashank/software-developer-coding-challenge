@@ -6,5 +6,5 @@ import com.traderev.model.UserCarBid;
 
 public interface CarBidHistoryRepository {
 	
-	List<UserCarBid> getCarHistoryBid(String carName);
+	List<UserCarBid> getCarHistoryBid(String carName,String carModel);
 }

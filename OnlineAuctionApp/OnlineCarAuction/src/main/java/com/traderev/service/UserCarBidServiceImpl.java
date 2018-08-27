@@ -40,7 +40,7 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 	
 	@Override
 	public boolean findUserRelatedCar(UserCarBidVO userCarBidVO) {
-		UserCarBid userCarBid = userCarBidRepository.findByUserIdAndCarName(userCarBidVO.getUserId(),userCarBidVO.getCar());
+		UserCarBid userCarBid = userCarBidRepository.findByUserIdAndCarNameAndCarModel(userCarBidVO.getUserId(),userCarBidVO.getCar(),userCarBidVO.getCarModel());
 		if(userCarBid != null) {
 			return false;
 		}
@@ -51,8 +51,8 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 	public Map<String,Object> saveUserBid(UserCarBidVO userCarBidVO) {
 		Map<String,Object> responseMap = new HashMap<>();
 		try {
-			CarDetails carDetails = carDetailsRepository.findByCarCompany(userCarBidVO.getCar());
-			List<UserCarBid> userCarBidRepo = carBidHistoryRepository.getCarHistoryBid(userCarBidVO.getCar());
+			CarDetails carDetails = carDetailsRepository.findByCarCompanyAndCarModel(userCarBidVO.getCar(),userCarBidVO.getCarModel());
+			List<UserCarBid> userCarBidRepo = carBidHistoryRepository.getCarHistoryBid(userCarBidVO.getCar(),userCarBidVO.getCarModel());
 			if(carDetails != null && carDetails.getCarAvailability().equals("Y")) {
 				if(userCarBidVO.getBidAmount() > carDetails.getBasePrice()) {
 					responseMap=initialCreationBid(userCarBidRepo,userCarBidVO);
@@ -90,6 +90,7 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 				UserCarBid userCarBid = new UserCarBid();
 				userCarBid.setUserId(userCarBidVO.getUserId());
 				userCarBid.setCarName(userCarBidVO.getCar());
+				userCarBid.setCarModel(userCarBidVO.getCarModel());
 				userCarBid.setBidAmount(userCarBidVO.getBidAmount());
 				userCarBid.setEmailAddress(userCarBidVO.getEmailAddress());
 				userCarBid.setPhoneNumber(userCarBidVO.getPhoneNumber());
@@ -109,6 +110,7 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 			UserCarBid userCarBid = new UserCarBid();
 			userCarBid.setUserId(userCarBidVO.getUserId());
 			userCarBid.setCarName(userCarBidVO.getCar());
+			userCarBid.setCarModel(userCarBidVO.getCarModel());
 			userCarBid.setBidAmount(userCarBidVO.getBidAmount());
 			userCarBid.setEmailAddress(userCarBidVO.getEmailAddress());
 			userCarBid.setPhoneNumber(userCarBidVO.getPhoneNumber());
@@ -121,7 +123,7 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 	public Map<String,Object> getCarBiddingHistory(UserCarBidVO userCarBidVO) {
 		Map<String,Object> responseMap = new HashMap<>();
 		try {
-			List<UserCarBid> userCarBidList =  carBidHistoryRepository.getCarHistoryBid(userCarBidVO.getCar());
+			List<UserCarBid> userCarBidList =  carBidHistoryRepository.getCarHistoryBid(userCarBidVO.getCar(),userCarBidVO.getCarModel());
 			if(!userCarBidList.isEmpty()) {
 				responseMap.put("header", "Car's Bidding History");
 				responseMap.put("carBidHistoryList", userCarBidList);
@@ -141,7 +143,7 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 		Map<String,Object> responseMap = new HashMap<>();
 		int count = 0;
 		try {
-			List<UserCarBid> userCarBidList =carBidHistoryRepository.getCarHistoryBid(userCarBidVO.getCar());
+			List<UserCarBid> userCarBidList =carBidHistoryRepository.getCarHistoryBid(userCarBidVO.getCar(),userCarBidVO.getCarModel());
 			if(!userCarBidList.isEmpty()) {
 				UserCarBid userWinningBid = userCarBidList.get(0);
 				for(UserCarBid userCarBid:userCarBidList) {
@@ -153,7 +155,7 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 					responseMap.put("header", "There is a tie in the Bid among the user's, Please check the Bidding  History for further details....");
 					responseMap.put("userBidDetails", null);
 				}else {
-					carUpdateDetailsRepository.updateCarAvailability(userCarBidVO.getCar());
+					carUpdateDetailsRepository.updateCarAvailability(userCarBidVO.getCar(),userCarBidVO.getCarModel(),userCarBidVO.getCarAvailability());
 					responseMap.put("header", "Winning Bid for a car");
 					responseMap.put("userBidDetails", userWinningBid);
 				}
@@ -191,7 +193,7 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 	public Map<String, Object> changeStatusOfCar(UserCarBidVO userCarBidVO) {
 		Map<String,Object> responseMap = new HashMap<>();
 		try {
-		String status = carUpdateDetailsRepository.updateCarAvailability(userCarBidVO.getCar());
+		String status = carUpdateDetailsRepository.updateCarAvailability(userCarBidVO.getCar(),userCarBidVO.getCarModel(),userCarBidVO.getCarAvailability());
 		responseMap.put("header", "Successful Updated Status of a Car...");
 		responseMap.put("Status", status);
 		}catch(Exception e){

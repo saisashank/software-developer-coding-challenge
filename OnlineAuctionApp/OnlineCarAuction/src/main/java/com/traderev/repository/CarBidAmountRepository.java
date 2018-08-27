@@ -4,5 +4,5 @@ import com.traderev.vo.UserCarBidVO;
 
 public interface CarBidAmountRepository {
 
-	void updateUserCarBid(UserCarBidVO userCarBidVO);
+	String updateUserCarBid(UserCarBidVO userCarBidVO);
 }

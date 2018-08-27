@@ -30,7 +30,7 @@ public class CarBidHistoryRepositoryImpl implements CarBidHistoryRepository {
 	private EntityManagerFactory entityManagerFactory;
 
 	@Override
-	public List<UserCarBid> getCarHistoryBid(String carName) {
+	public List<UserCarBid> getCarHistoryBid(String carName,String carModel) {
 		List<UserCarBid> userCarBidList = new ArrayList<>();
 		EntityManager em = null;
 		try {
@@ -40,7 +40,10 @@ public class CarBidHistoryRepositoryImpl implements CarBidHistoryRepository {
 			Root<UserCarBid> userCarBid = createQuery.from(UserCarBid.class);
 			createQuery.select(userCarBid);
 			List<Predicate> predicates = new ArrayList<>();
-			predicates.add(cb.equal(userCarBid.get("carName"), carName));
+			Predicate conditionOne = cb.equal(userCarBid.get("carName"),carName);
+			Predicate conditionTwo = cb.equal(userCarBid.get("carModel"),carModel);
+			Predicate combinedCondition = cb.and(conditionOne,conditionTwo);
+			predicates.add(combinedCondition);
 			Predicate combinedPredicate = cb.and(predicates.toArray(new Predicate[predicates.size()]));
 			createQuery.where(combinedPredicate);
 			List<Order> orderList = new ArrayList<>();

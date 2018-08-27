@@ -4,6 +4,7 @@ public class UserCarBidVO {
 
 	String userId;
 	String car;
+	String carModel;
 	String emailAddress;
 	String phoneNumber;
 	Double bidAmount;
@@ -93,5 +94,17 @@ public class UserCarBidVO {
 	 */
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+	/**
+	 * @return the carModel
+	 */
+	public String getCarModel() {
+		return carModel;
+	}
+	/**
+	 * @param carModel the carModel to set
+	 */
+	public void setCarModel(String carModel) {
+		this.carModel = carModel;
 	}
 }

@@ -30,7 +30,7 @@ public class UserCarBidRepositoryImpl implements CarBidAmountRepository {
 	private EntityManagerFactory entityManagerFactory;
 	
 	@Override
-	public void updateUserCarBid(UserCarBidVO userCarBidVO) {
+	public String updateUserCarBid(UserCarBidVO userCarBidVO) {
 		EntityManager em = null;
 		try {
 			em = entityManagerFactory.createEntityManager();
@@ -43,7 +43,8 @@ public class UserCarBidRepositoryImpl implements CarBidAmountRepository {
 			List<Predicate> predicates = new ArrayList<>();
 			Predicate conditionOne = cb.equal(updateUserCarBid.get("userId"),userCarBidVO.getUserId());
 			Predicate conditionTwo = cb.equal(updateUserCarBid.get("carName"),userCarBidVO.getCar());
-			Predicate combinedCondition = cb.and(conditionOne,conditionTwo);
+			Predicate conditionThree = cb.equal(updateUserCarBid.get("carModel"),userCarBidVO.getCarModel());
+			Predicate combinedCondition = cb.and(conditionOne,conditionTwo,conditionThree);
 			predicates.add(combinedCondition);
 			Predicate combinedPredicate = cb.and(predicates.toArray(new Predicate[predicates.size()]));
 			updateQuery.where(combinedPredicate);
@@ -57,5 +58,6 @@ public class UserCarBidRepositoryImpl implements CarBidAmountRepository {
 				logger.info("closing entity manager in getCarHistoryBid");
 			}
 		}
+		return "Successfully updated Car bid";
 	}
 }

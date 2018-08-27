@@ -28,8 +28,11 @@ public class UserCarBid {
 	@Column(name="PHNE_NUM")
 	private String phoneNumber;
 	
-	@Column(name="CAR")
+	@Column(name="CAR_CMPNY")
 	private String carName;
+	
+	@Column(name="CAR_MDL")
+	private String carModel;
 	
 	@Column(name="BID_AMNT")
 	private Double bidAmount;
@@ -116,5 +119,19 @@ public class UserCarBid {
 	 */
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+
+	/**
+	 * @return the carModel
+	 */
+	public String getCarModel() {
+		return carModel;
+	}
+
+	/**
+	 * @param carModel the carModel to set
+	 */
+	public void setCarModel(String carModel) {
+		this.carModel = carModel;
 	}
 }

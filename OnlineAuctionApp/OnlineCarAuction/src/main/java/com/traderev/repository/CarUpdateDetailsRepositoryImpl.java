@@ -31,7 +31,7 @@ public class CarUpdateDetailsRepositoryImpl implements CarUpdateDetailsRepositor
 	private EntityManagerFactory entityManagerFactory;
 
 	@Override
-	public String updateCarAvailability(String carName) {
+	public String updateCarAvailability(String carName,String carModel,String carAvailability) {
 		EntityManager em = null;
 		try {
 			em = entityManagerFactory.createEntityManager();
@@ -40,10 +40,10 @@ public class CarUpdateDetailsRepositoryImpl implements CarUpdateDetailsRepositor
 			transaction.begin();
 			CriteriaUpdate<CarDetails> updateQuery = cb.createCriteriaUpdate(CarDetails.class);
 			Root<CarDetails> updateCarDetails = updateQuery.from(CarDetails.class);
-			updateQuery.set(updateCarDetails.get("carAvailability"), "N");
+			updateQuery.set(updateCarDetails.get("carAvailability"), carAvailability);
 			List<Predicate> predicates = new ArrayList<>();
 			Predicate conditionOne = cb.equal(updateCarDetails.get("carCompany"),carName);
-			Predicate conditionTwo = cb.equal(updateCarDetails.get("carAvailability"),"Y");
+			Predicate conditionTwo = cb.equal(updateCarDetails.get("carModel"),carModel);
 			Predicate combinedCondition = cb.and(conditionOne,conditionTwo);
 			predicates.add(combinedCondition);
 			Predicate combinedPredicate = cb.and(predicates.toArray(new Predicate[predicates.size()]));
