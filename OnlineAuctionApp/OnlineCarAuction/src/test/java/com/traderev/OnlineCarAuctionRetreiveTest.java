@@ -53,7 +53,6 @@ public class OnlineCarAuctionRetreiveTest {
 		userCarBidVO.setCar("Benz");
 		Map<String,Object> userCarBidTestList =userCarBidService.getCarBiddingHistory(userCarBidVO);
 		assertEquals(2,userCarBidTestList.size());
-		
 	}
 	
 	@Test
