@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.traderev.model.CarDetails;
 import com.traderev.model.UserCarBid;
+import com.traderev.repository.CarBidAmountRepository;
 import com.traderev.repository.CarBidHistoryRepository;
 import com.traderev.repository.CarDetailsRepository;
 import com.traderev.repository.CarUpdateDetailsRepository;
@@ -34,6 +35,9 @@ public class OnlineCarAuctionRetreiveTest {
 	
 	@Mock
 	CarDetailsRepository carDetailsRepository;
+	
+	@Mock
+	CarBidAmountRepository carBidAmountRepository;
 	
 	@InjectMocks
 	UserCarBidServiceImpl userCarBidService = new UserCarBidServiceImpl();
@@ -90,8 +94,10 @@ public class OnlineCarAuctionRetreiveTest {
 		userCarBid.setEmailAddress("shashank@gmail.com");
 		userCarBid.setPhoneNumber("354-645-4536");
 		userCarBidList.add(userCarBid);
+		
 		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userCarBidList);
 		Mockito.when(carUpdateDetailsRepository.updateCarAvailability(Mockito.any(String.class),Mockito.any(String.class),Mockito.any(String.class))).thenReturn(message);
+		Mockito.when(carBidAmountRepository.updateAuctionStatus(Mockito.any(UserCarBidVO.class))).thenReturn(message);
 		
 		UserCarBidVO userCarBidVO = new UserCarBidVO();
 		userCarBidVO.setCar("Nissan");

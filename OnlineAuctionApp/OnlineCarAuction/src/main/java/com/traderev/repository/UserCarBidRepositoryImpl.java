@@ -60,4 +60,36 @@ public class UserCarBidRepositoryImpl implements CarBidAmountRepository {
 		}
 		return "Successfully updated Car bid";
 	}
+
+	@Override
+	public String updateAuctionStatus(UserCarBidVO userCarBidVO) {
+		EntityManager em = null;
+		try {
+			em = entityManagerFactory.createEntityManager();
+			CriteriaBuilder cb = em.getCriteriaBuilder();
+			EntityTransaction transaction = em.getTransaction();
+			transaction.begin();
+			CriteriaUpdate<UserCarBid> updateQuery = cb.createCriteriaUpdate(UserCarBid.class);
+			Root<UserCarBid> updateUserCarBid = updateQuery.from(UserCarBid.class);
+			updateQuery.set(updateUserCarBid.get("auctionStatus"), "BID CLOSED");
+			List<Predicate> predicates = new ArrayList<>();
+			Predicate conditionOne = cb.equal(updateUserCarBid.get("auctionStatus"),"IN-PROGRESS");
+			Predicate conditionTwo = cb.equal(updateUserCarBid.get("carName"),userCarBidVO.getCar());
+			Predicate conditionThree = cb.equal(updateUserCarBid.get("carModel"),userCarBidVO.getCarModel());
+			Predicate combinedCondition = cb.and(conditionOne,conditionTwo,conditionThree);
+			predicates.add(combinedCondition);
+			Predicate combinedPredicate = cb.and(predicates.toArray(new Predicate[predicates.size()]));
+			updateQuery.where(combinedPredicate);
+			em.createQuery(updateQuery).executeUpdate();
+			transaction.commit();
+		}catch (IllegalStateException | IllegalArgumentException e) {
+			logger.info("Exception in the updateAuctionStatus "+e);
+		} finally {
+			if (em != null) {
+				em.close();
+				logger.info("closing entity manager in updateAuctionStatus");
+			}
+		}
+		return "Successfully updated auction Status";
+	}
 }

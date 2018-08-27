@@ -36,6 +36,9 @@ public class UserCarBid {
 	
 	@Column(name="BID_AMNT")
 	private Double bidAmount;
+	
+	@Column(name="AUCTN_STUS")
+	private String auctionStatus;
 
 	/**
 	 * @return the userCarBidId
@@ -133,5 +136,19 @@ public class UserCarBid {
 	 */
 	public void setCarModel(String carModel) {
 		this.carModel = carModel;
+	}
+
+	/**
+	 * @return the auctionStatus
+	 */
+	public String getAuctionStatus() {
+		return auctionStatus;
+	}
+
+	/**
+	 * @param auctionStatus the auctionStatus to set
+	 */
+	public void setAuctionStatus(String auctionStatus) {
+		this.auctionStatus = auctionStatus;
 	}
 }

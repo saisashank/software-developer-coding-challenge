@@ -94,6 +94,7 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 				userCarBid.setBidAmount(userCarBidVO.getBidAmount());
 				userCarBid.setEmailAddress(userCarBidVO.getEmailAddress());
 				userCarBid.setPhoneNumber(userCarBidVO.getPhoneNumber());
+				userCarBid.setAuctionStatus("IN-PROGRESS");
 				userCarBidRepository.saveAndFlush(userCarBid);
 				userCarBidVO.setCreateNewOne(false);
 				responseMap.put("header", "successful insertion");
@@ -114,6 +115,7 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 			userCarBid.setBidAmount(userCarBidVO.getBidAmount());
 			userCarBid.setEmailAddress(userCarBidVO.getEmailAddress());
 			userCarBid.setPhoneNumber(userCarBidVO.getPhoneNumber());
+			userCarBid.setAuctionStatus("IN-PROGRESS");
 			userCarBidRepository.saveAndFlush(userCarBid);
 			responseMap.put("header", "successful insertion");
 		}
@@ -156,6 +158,7 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 					responseMap.put("userBidDetails", null);
 				}else {
 					carUpdateDetailsRepository.updateCarAvailability(userCarBidVO.getCar(),userCarBidVO.getCarModel(),userCarBidVO.getCarAvailability());
+					carBidAmountRepository.updateAuctionStatus(userCarBidVO);
 					responseMap.put("header", "Winning Bid for a car");
 					responseMap.put("userBidDetails", userWinningBid);
 				}

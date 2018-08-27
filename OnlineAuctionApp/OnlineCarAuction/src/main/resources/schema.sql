@@ -7,6 +7,7 @@ create table USR_CAR_BID
    EMAIL_ADD varchar(255) not null,
    PHNE_NUM varchar(255) not null,
    BID_AMNT double not null,
+   AUCTN_STUS varchar(255) not null,
    primary key(USR_CAR_BID_ID)
 );
 
