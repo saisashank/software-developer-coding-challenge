@@ -22,4 +22,9 @@ public class UserDetailsController {
 	public Map<String,Object> createUser(@RequestBody UserDetailsVO userDetailsVO) {
 		return userDetailsService.createUserDetails(userDetailsVO);
 	}
+	
+	@RequestMapping(value="/updateUserDetails",produces=MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.PUT,consumes=MediaType.APPLICATION_JSON_VALUE)
+	public Map<String,Object> updateUserDetails(@RequestBody UserDetailsVO userDetailsVO) {
+		return userDetailsService.updateUserDetails(userDetailsVO);
+	}
 }

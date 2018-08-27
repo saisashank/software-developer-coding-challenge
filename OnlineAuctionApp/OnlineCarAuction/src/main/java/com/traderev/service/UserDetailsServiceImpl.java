@@ -68,4 +68,22 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		}
 		return responseMap;
 	}
+	
+	@Override
+	public Map<String, Object> updateUserDetails(UserDetailsVO userDetailsVO) {
+		Map<String,Object> responseMap = new HashMap<>();
+		try {
+			UserDetails userDetails = userDetailsRepository.findByUserIdAndEmailAddress(userDetailsVO.getUserId(), userDetailsVO.getEmailAddress());
+			if(userDetails.getUserId().equalsIgnoreCase(userDetailsVO.getUserId()) || userDetails.getEmailAddress().equalsIgnoreCase(userDetailsVO.getEmailAddress())) {
+				userDetailsUpdateRepository.updateUserDetails(userDetailsVO);
+				responseMap.put("response","successful update of user details");
+			}else {
+				responseMap.put("response","Please check the User/Email provided for update...");
+			}
+		}catch(Exception e) {
+			logger.info("Exception in the createUserDetails "+e);
+			responseMap.put("Exception occured is: ", e.getMessage());
+		}
+		return responseMap;
+	}
 }

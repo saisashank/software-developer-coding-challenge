@@ -8,4 +8,6 @@ public interface UserDetailsService {
 	
 	Map<String,Object> createUserDetails(UserDetailsVO userDetailsVO);
 	
+	Map<String,Object> updateUserDetails(UserDetailsVO userDetailsVO);
+	
 }

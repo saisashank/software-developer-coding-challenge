@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.traderev.model.UserDetails;
 import com.traderev.repository.UserDetailsRepository;
+import com.traderev.repository.UserDetailsUpdateRepository;
 import com.traderev.service.UserDetailsServiceImpl;
 import com.traderev.vo.UserDetailsVO;
 
@@ -28,6 +29,9 @@ public class OnlineCarAuctionUserDetailsTest {
 	
 	@Mock
 	UserDetailsRepository userDetailsRepository;
+	
+	@Mock
+	UserDetailsUpdateRepository userDetailsUpdateRepository;
 	
 	@Test
 	public void testCreateUserDetails() {
@@ -139,6 +143,67 @@ public class OnlineCarAuctionUserDetailsTest {
 		UserDetailsVO userDetailsVO = new UserDetailsVO();
 		
 		Map<String,Object> responseMapTest = userDetailsServiceImpl.createUserDetails(userDetailsVO);
+		assertEquals(1,responseMapTest.size());
+	}
+	
+	@Test
+	public void testUpdateUserDetails() {
+		
+		UserDetails userDetails = new UserDetails();
+		userDetails.setEmailAddress("shashi@gmail.com");
+		userDetails.setFirstName("sai");
+		userDetails.setIsActive("Y");
+		userDetails.setLastName("ravi");
+		userDetails.setPhoneNumber("134");
+		userDetails.setUserId("Sashank");
+		
+		Mockito.when(userDetailsRepository.findByUserIdAndEmailAddress(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userDetails);
+		UserDetailsVO userDetailsVO = new UserDetailsVO();
+		userDetailsVO.setUserId("Sashank");
+		userDetailsVO.setEmailAddress("shashi@gmail.com");
+		
+		String message = "Successfully updated User Details";
+		Mockito.when(userDetailsUpdateRepository.updateUserDetails(Mockito.any(UserDetailsVO.class))).thenReturn(message);
+		
+		Map<String,Object> responseMapTest = userDetailsServiceImpl.updateUserDetails(userDetailsVO);
+		assertEquals(1,responseMapTest.size());
+	}
+	
+	@Test
+	public void testUpdateUserDetails_Else() {
+		
+		UserDetails userDetails = new UserDetails();
+		userDetails.setEmailAddress("shashi@gmail.com");
+		userDetails.setFirstName("sai");
+		userDetails.setIsActive("Y");
+		userDetails.setLastName("ravi");
+		userDetails.setPhoneNumber("134");
+		userDetails.setUserId("Sashank");
+		
+		Mockito.when(userDetailsRepository.findByUserIdAndEmailAddress(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userDetails);
+		UserDetailsVO userDetailsVO = new UserDetailsVO();
+		userDetailsVO.setUserId("Sashak");
+		userDetailsVO.setEmailAddress("sh@gmail.com");
+		
+		String message = "Successfully updated User Details";
+		Mockito.when(userDetailsUpdateRepository.updateUserDetails(Mockito.any(UserDetailsVO.class))).thenReturn(message);
+		
+		Map<String,Object> responseMapTest = userDetailsServiceImpl.updateUserDetails(userDetailsVO);
+		assertEquals(1,responseMapTest.size());
+	}
+	
+	@Test
+	public void testUpdateUserDetails_Exception() {
+		
+		Mockito.when(userDetailsRepository.findByUserIdAndEmailAddress(Mockito.any(String.class),Mockito.any(String.class))).thenThrow(Exception.class);
+		UserDetailsVO userDetailsVO = new UserDetailsVO();
+		userDetailsVO.setUserId("Sashank");
+		userDetailsVO.setEmailAddress("shashi@gmail.com");
+		
+		String message = "Successfully updated User Details";
+		Mockito.when(userDetailsUpdateRepository.updateUserDetails(Mockito.any(UserDetailsVO.class))).thenReturn(message);
+		
+		Map<String,Object> responseMapTest = userDetailsServiceImpl.updateUserDetails(userDetailsVO);
 		assertEquals(1,responseMapTest.size());
 	}
 
