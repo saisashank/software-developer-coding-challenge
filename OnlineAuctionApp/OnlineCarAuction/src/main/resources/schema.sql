@@ -8,6 +8,8 @@ create table USR_CAR_BID
    PHNE_NUM varchar(255) not null,
    BID_AMNT double not null,
    AUCTN_STUS varchar(255) not null,
+   CAR_DTLS_ID integer not null,
+   USR_DTLS_ID integer not null,
    primary key(USR_CAR_BID_ID)
 );
 
@@ -44,3 +46,6 @@ create table USR_DTLS
    IS_ACTV char(1) not null,
    primary key(USR_DTLS_ID)
 );
+
+ALTER TABLE USR_CAR_BID ADD FOREIGN KEY (CAR_DTLS_ID) REFERENCES CAR_DTLS(CAR_DTLS_ID);
+ALTER TABLE USR_CAR_BID ADD FOREIGN KEY (USR_DTLS_ID) REFERENCES USR_DTLS(USR_DTLS_ID);

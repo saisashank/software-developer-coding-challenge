@@ -17,10 +17,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.traderev.model.CarDetails;
 import com.traderev.model.UserCarBid;
+import com.traderev.model.UserDetails;
 import com.traderev.repository.CarBidAmountRepository;
 import com.traderev.repository.CarBidHistoryRepository;
 import com.traderev.repository.CarDetailsRepository;
 import com.traderev.repository.UserCarBidRepository;
+import com.traderev.repository.UserDetailsRepository;
 import com.traderev.service.UserCarBidService;
 import com.traderev.service.UserCarBidServiceImpl;
 import com.traderev.vo.UserCarBidVO;
@@ -44,8 +46,11 @@ public class OnlineCarAuctionCreationTest {
 	@Autowired
 	UserCarBidService userCarBidService;
 	
+	@Mock
+	UserDetailsRepository userDetailsRepository;
+	
 	@InjectMocks
-	UserCarBidService userCarBidServiceMocked  = new UserCarBidServiceImpl();
+	UserCarBidServiceImpl userCarBidServiceMocked  = new UserCarBidServiceImpl();
 	
 	@Test
 	public void testSaveUserBid() {
@@ -118,6 +123,16 @@ public class OnlineCarAuctionCreationTest {
 		userCarBidList.add(userCarBid);
 		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userCarBidList);
 		
+		UserDetails userDetails = new UserDetails();
+		userDetails.setEmailAddress("shashi@gmail.com");
+		userDetails.setFirstName("sai");
+		userDetails.setIsActive("Y");
+		userDetails.setLastName("ravi");
+		userDetails.setPhoneNumber("134");
+		userDetails.setUserId("Sashank");
+		
+		Mockito.when(userDetailsRepository.findByUserIdAndEmailAddress(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userDetails);
+		
 		String success = "success";
 		Mockito.when(carBidAmountRepository.updateUserCarBid(Mockito.any(UserCarBidVO.class))).thenReturn(success);
 		
@@ -161,6 +176,16 @@ public class OnlineCarAuctionCreationTest {
 		userCarBidList.add(userCarBid);
 		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userCarBidList);
 		
+		UserDetails userDetails = new UserDetails();
+		userDetails.setEmailAddress("shashi@gmail.com");
+		userDetails.setFirstName("sai");
+		userDetails.setIsActive("Y");
+		userDetails.setLastName("ravi");
+		userDetails.setPhoneNumber("134");
+		userDetails.setUserId("Sashank");
+		
+		Mockito.when(userDetailsRepository.findByUserIdAndEmailAddress(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userDetails);
+		
 		userCarBidServiceMocked.saveUserBid(userCarBidVO);
 		
 		UserCarBid userCarBidTest = new UserCarBid();
@@ -187,6 +212,16 @@ public class OnlineCarAuctionCreationTest {
 		
 		List<UserCarBid> userCarBidList = new ArrayList<>();
 		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userCarBidList);
+		
+		UserDetails userDetails = new UserDetails();
+		userDetails.setEmailAddress("shashi@gmail.com");
+		userDetails.setFirstName("sai");
+		userDetails.setIsActive("Y");
+		userDetails.setLastName("ravi");
+		userDetails.setPhoneNumber("134");
+		userDetails.setUserId("Sashank");
+		
+		Mockito.when(userDetailsRepository.findByUserIdAndEmailAddress(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userDetails);
 		
 		userCarBidServiceMocked.saveUserBid(userCarBidVO);
 		
@@ -221,6 +256,63 @@ public class OnlineCarAuctionCreationTest {
 		userCarBid.setCarName("Benz");
 		userCarBidList.add(userCarBid);
 		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userCarBidList);
+		
+		UserDetails userDetails = new UserDetails();
+		userDetails.setEmailAddress("shashi@gmail.com");
+		userDetails.setFirstName("sai");
+		userDetails.setIsActive("Y");
+		userDetails.setLastName("ravi");
+		userDetails.setPhoneNumber("134");
+		userDetails.setUserId("Sashank");
+		
+		Mockito.when(userDetailsRepository.findByUserIdAndEmailAddress(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userDetails);
+		
+		UserCarBid userCarBidTesting = null;
+		Mockito.when(userCarBidRepository.findByUserIdAndCarNameAndCarModel(Mockito.any(String.class),Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userCarBidTesting);
+		
+		userCarBidServiceMocked.saveUserBid(userCarBidVO);
+		
+		UserCarBid userCarBidTest = new UserCarBid();
+		userCarBidTest.setUserId("Nani");
+		userCarBidTest.setCarName("Benz");
+		Mockito.when(userCarBidRepository.findByUserId(Mockito.any(String.class))).thenReturn(userCarBidTest);
+		assertEquals(userCarBidVO.getCar(), userCarBidTest.getCarName());
+	}
+	
+	@Test
+	public void testSaveUserBid_Create_New_Highest_Bid_Else() {
+		UserCarBidVO userCarBidVO= new UserCarBidVO();
+		userCarBidVO.setUserId("Nani");
+		userCarBidVO.setCar("Benz");
+		userCarBidVO.setCarModel("2019 Benz");
+		userCarBidVO.setBidAmount(35001.0);
+		userCarBidVO.setEmailAddress("shashank@gmail.com");
+		userCarBidVO.setPhoneNumber("354-645-4536");
+		userCarBidVO.setCreateNewOne(true);
+		
+		CarDetails carDetails = new CarDetails();
+		carDetails.setBasePrice(100.0);
+		carDetails.setCarAvailability("Y");
+		Mockito.when(carDetailsRepository.findByCarCompanyAndCarModel(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(carDetails);
+		
+		List<UserCarBid> userCarBidList = new ArrayList<>();
+		UserCarBid userCarBid = new UserCarBid();
+		userCarBid.setUserCarBidId(1L);
+		userCarBid.setUserId("Sashank");
+		userCarBid.setBidAmount(35000.0);
+		userCarBid.setCarName("Benz");
+		userCarBidList.add(userCarBid);
+		Mockito.when(carBidHistoryRepository.getCarHistoryBid(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userCarBidList);
+		
+		UserDetails userDetails = new UserDetails();
+		userDetails.setEmailAddress("shashi@gmail.com");
+		userDetails.setFirstName("sai");
+		userDetails.setIsActive("Y");
+		userDetails.setLastName("ravi");
+		userDetails.setPhoneNumber("134");
+		userDetails.setUserId("Sashank");
+		
+		Mockito.when(userDetailsRepository.findByUserIdAndEmailAddress(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userDetails);
 		
 		UserCarBid userCarBidTesting = new UserCarBid();
 		userCarBidTesting.setUserId("Sashank");
@@ -266,6 +358,16 @@ public class OnlineCarAuctionCreationTest {
 		CarDetails carDetails = new CarDetails();
 		carDetails.setBasePrice(100.0);
 		carDetails.setCarAvailability("Y");
+		
+		UserDetails userDetails = new UserDetails();
+		userDetails.setEmailAddress("shashi@gmail.com");
+		userDetails.setFirstName("sai");
+		userDetails.setIsActive("Y");
+		userDetails.setLastName("ravi");
+		userDetails.setPhoneNumber("134");
+		userDetails.setUserId("Sashank");
+		
+		Mockito.when(userDetailsRepository.findByUserIdAndEmailAddress(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userDetails);
 		Mockito.when(carDetailsRepository.findByCarCompanyAndCarModel(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(carDetails);
 		
 		Map<String,Object> responseMap = userCarBidServiceMocked.saveUserBid(userCarBidVO);

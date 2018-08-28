@@ -1,10 +1,13 @@
 package com.traderev.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
@@ -18,6 +21,9 @@ public class UserDetails {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="USR_DTLS_ID")
 	private Long userDetailsId;
+	
+	@OneToMany(mappedBy="userDetails")
+	private List<UserCarBid> userCarBidList;
 	
 	@Column(name="USR_ID")
 	private String userId;
@@ -133,5 +139,19 @@ public class UserDetails {
 	 */
 	public void setIsActive(String isActive) {
 		this.isActive = isActive;
+	}
+
+	/**
+	 * @return the userCarBidList
+	 */
+	public List<UserCarBid> getUserCarBidList() {
+		return userCarBidList;
+	}
+
+	/**
+	 * @param userCarBidList the userCarBidList to set
+	 */
+	public void setUserCarBidList(List<UserCarBid> userCarBidList) {
+		this.userCarBidList = userCarBidList;
 	}
 }

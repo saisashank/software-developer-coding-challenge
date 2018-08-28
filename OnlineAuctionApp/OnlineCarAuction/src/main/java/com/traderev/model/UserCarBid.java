@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
@@ -18,6 +20,14 @@ public class UserCarBid {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="USR_CAR_BID_ID")
 	private Long userCarBidId;
+	
+	@ManyToOne
+	@JoinColumn(name="CAR_DTLS_ID",nullable = false)
+	private CarDetails carDetails;
+	
+	@ManyToOne
+	@JoinColumn(name="USR_DTLS_ID",nullable = false)
+	private UserDetails userDetails;
 	
 	@Column(name="USR_ID")
 	private String userId;
@@ -150,5 +160,33 @@ public class UserCarBid {
 	 */
 	public void setAuctionStatus(String auctionStatus) {
 		this.auctionStatus = auctionStatus;
+	}
+
+	/**
+	 * @return the carDetails
+	 */
+	public CarDetails getCarDetails() {
+		return carDetails;
+	}
+
+	/**
+	 * @param carDetails the carDetails to set
+	 */
+	public void setCarDetails(CarDetails carDetails) {
+		this.carDetails = carDetails;
+	}
+
+	/**
+	 * @return the userDetails
+	 */
+	public UserDetails getUserDetails() {
+		return userDetails;
+	}
+
+	/**
+	 * @param userDetails the userDetails to set
+	 */
+	public void setUserDetails(UserDetails userDetails) {
+		this.userDetails = userDetails;
 	}
 }
