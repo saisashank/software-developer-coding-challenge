@@ -42,6 +42,23 @@ public class OnlineCarAuctionUpdateDetailsTest {
 		
 		CarDetailsVO carDetailsVO = new CarDetailsVO();
 		carDetailsVO.setCarModel("2019");
+		carDetailsVO.setCarStatus("Y");
+		Map<String,Object> testResponseMap = carDetailsService.updateCarDetails(carDetailsVO);
+		assertEquals(1,testResponseMap.size());
+	}
+	
+	@Test
+	public void testUpdateCarDetails_delete() {
+		String success = "Success";
+		CarDetails carDetails = new CarDetails();
+		carDetails.setCarCompany("Toyota");
+		Mockito.when(carDetailsRepository.findByCarCompanyAndCarModel(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(carDetails);
+		Mockito.when(carUpdateDetailsRepository.deleteCarDetails(Mockito.any(Long.class))).thenReturn(success);
+		
+		
+		CarDetailsVO carDetailsVO = new CarDetailsVO();
+		carDetailsVO.setCarModel("2019");
+		carDetailsVO.setCarStatus("N");
 		Map<String,Object> testResponseMap = carDetailsService.updateCarDetails(carDetailsVO);
 		assertEquals(1,testResponseMap.size());
 	}

@@ -30,8 +30,13 @@ public class CarDetailsServiceImpl implements CarDetailsService{
 		try {
 			CarDetails carDetails = carDetailsRepository.findByCarCompanyAndCarModel(carDetailsVO.getCarCompany(),carDetailsVO.getCarModel());
 			if(carDetails != null) {
-				String success = carUpdateDetailsRepository.updateCarDetails(carDetailsVO);
-				responseMap.put("response",success);
+				if(carDetailsVO.getCarStatus().equalsIgnoreCase("Y")) {
+					String success = carUpdateDetailsRepository.updateCarDetails(carDetailsVO);
+					responseMap.put("response",success);
+				}else {
+					carUpdateDetailsRepository.deleteCarDetails(carDetails.getCarDetailsId());
+					responseMap.put("response", "Car Details deleted from the DB permanently...");
+				}
 			}else {
 				responseMap.put("response","Cannot find the car trying to update...");
 			}

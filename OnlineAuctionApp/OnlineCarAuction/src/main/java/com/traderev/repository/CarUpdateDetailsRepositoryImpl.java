@@ -8,7 +8,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import com.traderev.model.CarDetails;
+import com.traderev.model.UserDetails;
 import com.traderev.vo.CarDetailsVO;
 
 @Repository("carUpdateDetailsRepositoryImpl")
@@ -100,6 +103,36 @@ public class CarUpdateDetailsRepositoryImpl implements CarUpdateDetailsRepositor
 			}
 		}
 		return "Successful Updation of Car's Details";
+	}
+
+
+	@Override
+	public String deleteCarDetails(Long carDetailsId) {
+		EntityManager em = null;
+		try {
+			em = entityManagerFactory.createEntityManager();
+			CriteriaBuilder cb = em.getCriteriaBuilder();
+			EntityTransaction transaction = em.getTransaction();
+			transaction.begin();
+			CriteriaDelete<CarDetails> deleteQuery = cb.createCriteriaDelete(CarDetails.class);
+			Root<CarDetails> deleteCarDetails = deleteQuery.from(CarDetails.class);
+			Expression<Integer> expression = deleteCarDetails.get("carDetailsId");
+			Predicate predicate = expression.in(carDetailsId);
+			List<Predicate> predicates = new ArrayList<>();
+			predicates.add(predicate);
+			Predicate combinedPredicate = cb.and(predicates.toArray(new Predicate[predicates.size()]));
+			deleteQuery.where(combinedPredicate);
+			em.createQuery(deleteQuery).executeUpdate();
+			transaction.commit();
+		}catch (IllegalStateException | IllegalArgumentException e) {
+			logger.info("Exception in the deleteCarDetails "+e);
+		} finally {
+			if (em != null) {
+				em.close();
+				logger.info("closing entity manager in deleteCarDetails");
+			}
+		}
+		return "Successfully deleted user record's";
 	}
 	
 
