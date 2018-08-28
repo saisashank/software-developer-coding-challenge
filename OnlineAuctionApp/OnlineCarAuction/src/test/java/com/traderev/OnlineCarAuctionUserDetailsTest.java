@@ -292,5 +292,75 @@ public class OnlineCarAuctionUserDetailsTest {
 		Map<String,Object> responseMapTest = userDetailsServiceImpl.updateUserActiveStatus(userDetailsVO);
 		assertEquals(1,responseMapTest.size());
 	}
+	
+	@Test
+	public void testGetAllActiveUsers() {
+		
+		UserDetails userDetails = new UserDetails();
+		userDetails.setEmailAddress("shashi@gmail.com");
+		userDetails.setFirstName("sai");
+		userDetails.setIsActive("Y");
+		userDetails.setLastName("ravi");
+		userDetails.setPhoneNumber("134");
+		userDetails.setUserId("Sashank");
+		
+		List<UserDetails> userDetailsList =new ArrayList<>();
+		userDetailsList.add(userDetails);
+		
+		UserDetailsVO userDetailsVO = new UserDetailsVO();
+		userDetailsVO.setIsActive("Y");
+		
+		Mockito.when(userDetailsRepository.findByIsActive(Mockito.any(String.class))).thenReturn(userDetailsList);
+		
+		Map<String,Object> responseMapTest = userDetailsServiceImpl.getAllActiveUsers(userDetailsVO);
+		assertEquals(2,responseMapTest.size());
+	}
+	
+	@Test
+	public void testGetAllActiveUsers_Else() {
+		
+		UserDetails userDetails = new UserDetails();
+		userDetails.setEmailAddress("shashi@gmail.com");
+		userDetails.setFirstName("sai");
+		userDetails.setIsActive("Y");
+		userDetails.setLastName("ravi");
+		userDetails.setPhoneNumber("134");
+		userDetails.setUserId("Sashank");
+		
+		List<UserDetails> userDetailsList =new ArrayList<>();
+		userDetailsList.add(userDetails);
+		
+		UserDetailsVO userDetailsVO = new UserDetailsVO();
+		userDetailsVO.setIsActive("N");
+		
+		Mockito.when(userDetailsRepository.findByIsActive(Mockito.any(String.class))).thenReturn(userDetailsList);
+		
+		Map<String,Object> responseMapTest = userDetailsServiceImpl.getAllActiveUsers(userDetailsVO);
+		assertEquals(2,responseMapTest.size());
+	}
+	
+	@Test
+	public void testGetAllActiveUsers_Empty_List() {
+		
+		List<UserDetails> userDetailsList =new ArrayList<>();
+		
+		UserDetailsVO userDetailsVO = new UserDetailsVO();
+		userDetailsVO.setIsActive("N");
+		
+		Mockito.when(userDetailsRepository.findByIsActive(Mockito.any(String.class))).thenReturn(userDetailsList);
+		
+		Map<String,Object> responseMapTest = userDetailsServiceImpl.getAllActiveUsers(userDetailsVO);
+		assertEquals(2,responseMapTest.size());
+	}
+	
+	@Test
+	public void testGetAllActiveUsers_Exception() {
+		
+		Mockito.when(userDetailsRepository.findByIsActive(Mockito.any(String.class))).thenThrow(Exception.class);
+		
+		
+		Map<String,Object> responseMapTest = userDetailsServiceImpl.getAllActiveUsers(null);
+		assertEquals(1,responseMapTest.size());
+	}
 
 }

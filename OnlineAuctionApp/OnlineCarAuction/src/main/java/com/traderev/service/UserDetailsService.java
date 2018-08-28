@@ -12,4 +12,6 @@ public interface UserDetailsService {
 	
 	Map<String,Object> updateUserActiveStatus(UserDetailsVO userDetailsVO);
 	
+	Map<String,Object> getAllActiveUsers(UserDetailsVO userDetailsVO);
+	
 }

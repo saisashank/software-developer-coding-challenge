@@ -179,8 +179,13 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 		try {
 			List<CarDetails> carDetailsList = carDetailsRepository.findByCarAvailability(userCarBidVO.getCarAvailability());
 			if(!carDetailsList.isEmpty()) {
-				responseMap.put("header", "Available car's for Bidding...");
-				responseMap.put("carBidHistoryList", carDetailsList);
+				if(userCarBidVO.getCarAvailability().equalsIgnoreCase("Y")) {
+					responseMap.put("header", "Available car's for Bidding...");
+					responseMap.put("carBidHistoryList", carDetailsList);
+				}else {
+					responseMap.put("header", "Unavailable car's for Bidding...");
+					responseMap.put("carBidHistoryList", carDetailsList);
+				}
 			}else {
 				responseMap.put("header", "Sorry, currently no car's are available for bidding...");
 				responseMap.put("carBidHistoryList", carDetailsList);

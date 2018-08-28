@@ -47,6 +47,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 						userDetailsNew.setIsActive("Y");
 						userDetailsRepository.saveAndFlush(userDetailsNew);
 						responseMap.put("response", "successfully created User");
+						break;
 					}
 				}
 				
@@ -105,6 +106,30 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			}
 		}catch(Exception e) {
 			logger.info("Exception in the updateUserActiveStatus "+e);
+			responseMap.put("Exception occured is: ", e.getMessage());
+		}
+		return responseMap;
+	}
+
+	@Override
+	public Map<String, Object> getAllActiveUsers(UserDetailsVO userDetailsVO) {
+		Map<String,Object> responseMap = new HashMap<>();
+		try {
+			List<UserDetails> userDetailsList = userDetailsRepository.findByIsActive(userDetailsVO.getIsActive());
+			if(!userDetailsList.isEmpty()) {
+				if(userDetailsVO.getIsActive().equalsIgnoreCase("Y")) {
+					responseMap.put("header", "List of User who are Active...");
+					responseMap.put("response", userDetailsList);
+				}else {
+					responseMap.put("header", "List of User who are Inactive...");
+					responseMap.put("response", userDetailsList);
+				}
+			}else {
+				responseMap.put("header", "No User's Available...");
+				responseMap.put("response", userDetailsList);
+			}
+		}catch(Exception e) {
+			logger.info("Exception in the getWinningBid "+e);
 			responseMap.put("Exception occured is: ", e.getMessage());
 		}
 		return responseMap;

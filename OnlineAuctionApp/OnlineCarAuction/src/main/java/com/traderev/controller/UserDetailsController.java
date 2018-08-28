@@ -32,4 +32,9 @@ public class UserDetailsController {
 	public Map<String,Object> updateUserActiveStatus(@RequestBody UserDetailsVO userDetailsVO) {
 		return userDetailsService.updateUserActiveStatus(userDetailsVO);
 	}
+	
+	@RequestMapping(value="/getAllActiveUsers",produces=MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
+	public Map<String,Object> getAllActiveUsers(@RequestBody UserDetailsVO userDetailsVO) {
+		return userDetailsService.getAllActiveUsers(userDetailsVO);
+	}
 }

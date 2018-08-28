@@ -177,6 +177,25 @@ public class OnlineCarAuctionRetreiveTest {
 	}
 	
 	@Test
+	public void testGetAvailableCarForBid_Else() {
+		List<CarDetails> carDetailsList = new ArrayList<>();
+		CarDetails carDetails = new CarDetails();
+		carDetails.setBasePrice(4599.0);
+		carDetails.setCarAvailability("Y");
+		carDetails.setCarCompany("Benz");
+		carDetails.setCarDetailsId(1L);
+		carDetails.setCarModel("2019");
+		carDetailsList.add(carDetails);
+		Mockito.when(carDetailsRepository.findByCarAvailability(Mockito.any(String.class))).thenReturn(carDetailsList);
+		
+		UserCarBidVO userCarBidVO = new UserCarBidVO();
+		userCarBidVO.setCarAvailability("N");
+		Map<String,Object> testResponseMap = userCarBidService.getAvailableCarForBid(userCarBidVO);
+		assertEquals("Unavailable car's for Bidding...",testResponseMap.get("header"));
+		
+	}
+	
+	@Test
 	public void testGetAvailableCarForBid_No_List() {
 		List<CarDetails> carDetailsList = new ArrayList<>();
 		Mockito.when(carDetailsRepository.findByCarAvailability(Mockito.any(String.class))).thenReturn(carDetailsList);
