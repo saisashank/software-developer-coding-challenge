@@ -10,4 +10,6 @@ public interface UserDetailsService {
 	
 	Map<String,Object> updateUserDetails(UserDetailsVO userDetailsVO);
 	
+	Map<String,Object> updateUserActiveStatus(UserDetailsVO userDetailsVO);
+	
 }

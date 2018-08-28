@@ -206,5 +206,91 @@ public class OnlineCarAuctionUserDetailsTest {
 		Map<String,Object> responseMapTest = userDetailsServiceImpl.updateUserDetails(userDetailsVO);
 		assertEquals(1,responseMapTest.size());
 	}
+	
+	@Test
+	public void testUpdateUserActiveStatus() {
+		
+		UserDetails userDetails = new UserDetails();
+		userDetails.setEmailAddress("shashi@gmail.com");
+		userDetails.setFirstName("sai");
+		userDetails.setIsActive("Y");
+		userDetails.setLastName("ravi");
+		userDetails.setPhoneNumber("134");
+		userDetails.setUserId("Sashank");
+		
+		UserDetailsVO userDetailsVO = new UserDetailsVO();
+		userDetailsVO.setUserStatus("Y");
+		
+		String message = "success";
+		
+		Mockito.when(userDetailsRepository.findByUserIdAndEmailAddress(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userDetails);
+		Mockito.when(userDetailsUpdateRepository.updateUserActiveStatus(Mockito.any(UserDetailsVO.class))).thenReturn(message);
+		
+		Map<String,Object> responseMapTest = userDetailsServiceImpl.updateUserActiveStatus(userDetailsVO);
+		assertEquals(1,responseMapTest.size());
+	}
+	
+	@Test
+	public void testUpdateUserActiveStatus_delete() {
+		
+		UserDetails userDetails = new UserDetails();
+		userDetails.setEmailAddress("shashi@gmail.com");
+		userDetails.setFirstName("sai");
+		userDetails.setIsActive("Y");
+		userDetails.setLastName("ravi");
+		userDetails.setPhoneNumber("134");
+		userDetails.setUserId("Sashank");
+		
+		UserDetailsVO userDetailsVO = new UserDetailsVO();
+		userDetailsVO.setUserStatus("N");
+		
+		String message = "success";
+		
+		Mockito.when(userDetailsRepository.findByUserIdAndEmailAddress(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userDetails);
+		Mockito.when(userDetailsUpdateRepository.deleteUserDetails(Mockito.any(Long.class))).thenReturn(message);
+		
+		Map<String,Object> responseMapTest = userDetailsServiceImpl.updateUserActiveStatus(userDetailsVO);
+		assertEquals(1,responseMapTest.size());
+	}
+	
+	@Test
+	public void testUpdateUserActiveStatus_No_Records() {
+		
+		UserDetails userDetails = null;
+		
+		UserDetailsVO userDetailsVO = new UserDetailsVO();
+		userDetailsVO.setUserStatus("N");
+		
+		String message = "success";
+		
+		Mockito.when(userDetailsRepository.findByUserIdAndEmailAddress(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(userDetails);
+		Mockito.when(userDetailsUpdateRepository.deleteUserDetails(Mockito.any(Long.class))).thenReturn(message);
+		
+		Map<String,Object> responseMapTest = userDetailsServiceImpl.updateUserActiveStatus(userDetailsVO);
+		assertEquals(1,responseMapTest.size());
+	}
+	
+	@Test
+	public void testUpdateUserActiveStatus_Exception() {
+		
+		UserDetails userDetails = new UserDetails();
+		userDetails.setEmailAddress("shashi@gmail.com");
+		userDetails.setFirstName("sai");
+		userDetails.setIsActive("Y");
+		userDetails.setLastName("ravi");
+		userDetails.setPhoneNumber("134");
+		userDetails.setUserId("Sashank");
+		
+		UserDetailsVO userDetailsVO = new UserDetailsVO();
+		userDetailsVO.setUserStatus("N");
+		
+		String message = "success";
+		
+		Mockito.when(userDetailsRepository.findByUserIdAndEmailAddress(Mockito.any(String.class),Mockito.any(String.class))).thenThrow(Exception.class);
+		Mockito.when(userDetailsUpdateRepository.deleteUserDetails(Mockito.any(Long.class))).thenReturn(message);
+		
+		Map<String,Object> responseMapTest = userDetailsServiceImpl.updateUserActiveStatus(userDetailsVO);
+		assertEquals(1,responseMapTest.size());
+	}
 
 }

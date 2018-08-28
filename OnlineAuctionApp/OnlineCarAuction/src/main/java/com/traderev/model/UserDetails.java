@@ -17,7 +17,7 @@ public class UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="USR_DTLS_ID")
-	private Long userCarBidId;
+	private Long userDetailsId;
 	
 	@Column(name="USR_ID")
 	private String userId;
@@ -38,17 +38,17 @@ public class UserDetails {
 	private String isActive;
 
 	/**
-	 * @return the userCarBidId
+	 * @return the userDetailsId
 	 */
-	public Long getUserCarBidId() {
-		return userCarBidId;
+	public Long getUserDetailsId() {
+		return userDetailsId;
 	}
 
 	/**
-	 * @param userCarBidId the userCarBidId to set
+	 * @param userDetailsId the userDetailsId to set
 	 */
-	public void setUserCarBidId(Long userCarBidId) {
-		this.userCarBidId = userCarBidId;
+	public void setUserDetailsId(Long userDetailsId) {
+		this.userDetailsId = userDetailsId;
 	}
 
 	/**

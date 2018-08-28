@@ -27,4 +27,9 @@ public class UserDetailsController {
 	public Map<String,Object> updateUserDetails(@RequestBody UserDetailsVO userDetailsVO) {
 		return userDetailsService.updateUserDetails(userDetailsVO);
 	}
+	
+	@RequestMapping(value="/updateUserActiveStatus",produces=MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.PUT,consumes=MediaType.APPLICATION_JSON_VALUE)
+	public Map<String,Object> updateUserActiveStatus(@RequestBody UserDetailsVO userDetailsVO) {
+		return userDetailsService.updateUserActiveStatus(userDetailsVO);
+	}
 }

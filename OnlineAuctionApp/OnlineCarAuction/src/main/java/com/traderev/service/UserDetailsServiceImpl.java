@@ -86,4 +86,27 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		}
 		return responseMap;
 	}
+
+	@Override
+	public Map<String, Object> updateUserActiveStatus(UserDetailsVO userDetailsVO) {
+		Map<String,Object> responseMap = new HashMap<>();
+		try {
+			UserDetails userDetails = userDetailsRepository.findByUserIdAndEmailAddress(userDetailsVO.getUserId(), userDetailsVO.getEmailAddress());
+			if(userDetails != null) {
+				if(userDetailsVO.getUserStatus().equalsIgnoreCase("Y")) {
+					userDetailsUpdateRepository.updateUserActiveStatus(userDetailsVO);
+					responseMap.put("response", "updated the Active Status of user...");
+				}else {
+					userDetailsUpdateRepository.deleteUserDetails(userDetails.getUserDetailsId());
+					responseMap.put("response", "User deleted from the DB permanently...");
+				}
+			}else {
+				responseMap.put("response", "User intended to delete/update is not present...");
+			}
+		}catch(Exception e) {
+			logger.info("Exception in the updateUserActiveStatus "+e);
+			responseMap.put("Exception occured is: ", e.getMessage());
+		}
+		return responseMap;
+	}
 }

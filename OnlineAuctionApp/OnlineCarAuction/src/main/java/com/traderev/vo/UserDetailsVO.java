@@ -8,6 +8,7 @@ public class UserDetailsVO {
 	private String emailAddress;
 	private String phoneNumber;
 	private String isActive;
+	private String userStatus;
 
 	/**
 	 * @return the userId
@@ -80,5 +81,17 @@ public class UserDetailsVO {
 	 */
 	public void setIsActive(String isActive) {
 		this.isActive = isActive;
+	}
+	/**
+	 * @return the userStatus
+	 */
+	public String getUserStatus() {
+		return userStatus;
+	}
+	/**
+	 * @param userStatus the userStatus to set
+	 */
+	public void setUserStatus(String userStatus) {
+		this.userStatus = userStatus;
 	}
 }
