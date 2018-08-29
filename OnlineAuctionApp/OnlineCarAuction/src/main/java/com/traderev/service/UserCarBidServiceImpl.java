@@ -43,6 +43,7 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 	@Autowired
 	UserDetailsRepository userDetailsRepository;
 	
+	
 	@Override
 	public boolean findUserRelatedCar(UserCarBidVO userCarBidVO) {
 		UserCarBid userCarBid = userCarBidRepository.findByUserIdAndCarNameAndCarModel(userCarBidVO.getUserId(),userCarBidVO.getCar(),userCarBidVO.getCarModel());
@@ -211,11 +212,17 @@ public class UserCarBidServiceImpl implements UserCarBidService {
 	public Map<String, Object> changeStatusOfCar(UserCarBidVO userCarBidVO) {
 		Map<String,Object> responseMap = new HashMap<>();
 		try {
-		String status = carUpdateDetailsRepository.updateCarAvailability(userCarBidVO.getCar(),userCarBidVO.getCarModel(),userCarBidVO.getCarAvailability());
-		responseMap.put("header", "Successful Updated Status of a Car...");
-		responseMap.put("Status", status);
+			CarDetails carDetails = carDetailsRepository.findByCarCompanyAndCarModel(userCarBidVO.getCar(),userCarBidVO.getCarModel());
+			if(carDetails !=null) {
+				String status = carUpdateDetailsRepository.updateCarAvailability(userCarBidVO.getCar(),userCarBidVO.getCarModel(),userCarBidVO.getCarAvailability());
+				responseMap.put("header", "Successful Updated Status of a Car...");
+				responseMap.put("Status", status);
+			}else {
+				responseMap.put("header", "Intended car is not available");
+			}
+		
 		}catch(Exception e){
-			logger.info("Exception in the getWinningBid "+e);
+			logger.info("Exception in the changeStatusOfCar "+e);
 			responseMap.put("Exception occured is: ", e.getMessage());
 		}
 		return responseMap;

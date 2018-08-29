@@ -220,6 +220,10 @@ public class OnlineCarAuctionRetreiveTest {
 	
 	@Test
 	public void testChangeStatusOfCar() {
+		CarDetails carDetails = new CarDetails();
+		carDetails.setCarCompany("Toyota");
+		Mockito.when(carDetailsRepository.findByCarCompanyAndCarModel(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(carDetails);
+
 		String message = "success";
 		Mockito.when(carUpdateDetailsRepository.updateCarAvailability(Mockito.any(String.class),Mockito.any(String.class),Mockito.any(String.class))).thenReturn(message);
 		
@@ -231,7 +235,25 @@ public class OnlineCarAuctionRetreiveTest {
 	}
 	
 	@Test
+	public void testChangeStatusOfCar_Else() {
+		CarDetails carDetails = null;
+		Mockito.when(carDetailsRepository.findByCarCompanyAndCarModel(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(carDetails);
+
+		String message = "success";
+		Mockito.when(carUpdateDetailsRepository.updateCarAvailability(Mockito.any(String.class),Mockito.any(String.class),Mockito.any(String.class))).thenReturn(message);
+		
+		UserCarBidVO userCarBidVO = new UserCarBidVO();
+		userCarBidVO.setCar("Toyota");
+		Map<String,Object> testResponseMap = userCarBidService.changeStatusOfCar(userCarBidVO);
+		assertEquals("Intended car is not available",testResponseMap.get("header"));
+		
+	}
+	
+	@Test
 	public void testChangeStatusOfCar_Exception() {
+		
+		Mockito.when(carDetailsRepository.findByCarCompanyAndCarModel(Mockito.any(String.class),Mockito.any(String.class))).thenThrow(Exception.class);
+		
 		Mockito.when(carUpdateDetailsRepository.updateCarAvailability(Mockito.any(String.class),Mockito.any(String.class),Mockito.any(String.class))).thenThrow(Exception.class);
 		
 		UserCarBidVO userCarBidVO = new UserCarBidVO();

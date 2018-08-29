@@ -23,7 +23,7 @@ public class CreateRecordController {
 		return carDetailsService.updateCarDetails(carDetailsVO);
 	}
 
-	@RequestMapping(value="/createCarForBid",produces=MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.PUT,consumes=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/createCarForBid",produces=MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
 	public Map<String,Object> createCarForBid(@RequestBody CarDetailsVO carDetailsVO) {
 		return carDetailsService.createCarForBid(carDetailsVO);
 	}

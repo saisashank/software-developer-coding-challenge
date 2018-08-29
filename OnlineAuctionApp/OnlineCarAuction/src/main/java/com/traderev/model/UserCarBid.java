@@ -2,6 +2,7 @@ package com.traderev.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="USR_CAR_BID")
@@ -21,12 +24,14 @@ public class UserCarBid {
 	@Column(name="USR_CAR_BID_ID")
 	private Long userCarBidId;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="CAR_DTLS_ID",nullable = false)
+	@JsonIgnore
 	private CarDetails carDetails;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="USR_DTLS_ID",nullable = false)
+	@JsonIgnore
 	private UserDetails userDetails;
 	
 	@Column(name="USR_ID")
